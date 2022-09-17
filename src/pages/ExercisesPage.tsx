@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
-import { Container, Typography } from '@mui/material';
+import { ExercisesTabsProvider } from 'context/ExercisesTabs';
+import { ExercisesTabs } from 'components/exercises';
 
 const ExercisesPage: FC = () => {
   return (
-    <Container>
-      <Typography>Exercises Page</Typography>
-    </Container>
+    <ExercisesTabsProvider>
+      <ExercisesTabs />
+    </ExercisesTabsProvider>
   );
 };
 

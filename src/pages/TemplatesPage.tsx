@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
-import { Container, Typography } from '@mui/material';
+import { TemplatesTabs } from 'components/templates';
+import { TemplatesTabsProvider } from 'context/TemplatesTabs';
 
 const TemplatesPage: FC = () => {
   return (
-    <Container>
-      <Typography>Template Page</Typography>
-    </Container>
+    <TemplatesTabsProvider>
+      <TemplatesTabs />
+    </TemplatesTabsProvider>
   );
 };
 
