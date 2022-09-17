@@ -12,6 +12,7 @@ import {
 import { Layout } from 'components/common';
 import { CssBaseline } from '@mui/material';
 import { NavDrawerProvider } from 'context/NavDrawer';
+import { Paths } from 'types/enums';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
@@ -22,12 +23,12 @@ root.render(
       <NavDrawerProvider>
         <Routes>
           <Route path={'/'} element={<Layout />}>
-            <Route index element={<Navigate to={'/auth'} />} />
-            <Route path={'auth'} element={<AuthPage />} />
-            <Route path={'diagram'} element={<DiagramPage />} />
-            <Route path={'training'} element={<TrainingPage />} />
-            <Route path={'exercises'} element={<ExercisesPage />} />
-            <Route path={'templates'} element={<TemplatesPage />} />
+            <Route index element={<Navigate to={`/${Paths.AUTH}`} />} />
+            <Route path={Paths.AUTH} element={<AuthPage />} />
+            <Route path={Paths.DIAGRAM} element={<DiagramPage />} />
+            <Route path={Paths.TRAINING} element={<TrainingPage />} />
+            <Route path={Paths.EXERCISES} element={<ExercisesPage />} />
+            <Route path={Paths.TEMPLATES} element={<TemplatesPage />} />
             <Route path={'*'} element={<NotFoundPage />} />
           </Route>
         </Routes>
