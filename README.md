@@ -1,2 +1,2 @@
 # workout
-The workout manager.
+The workout manager web application.

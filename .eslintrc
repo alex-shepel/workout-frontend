@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "react-app"
+  ],
+  "rules": {
+    "no-console": "warn",
+    "quotes": ["warn", "single"],
+    "prefer-const": "warn"
+  }
+}
