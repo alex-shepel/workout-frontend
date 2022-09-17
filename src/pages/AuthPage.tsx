@@ -1,12 +1,8 @@
 import React, { FC } from 'react';
-import { Container, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
 const AuthPage: FC = () => {
-  return (
-    <Container>
-      <Typography>Authorization Page</Typography>
-    </Container>
-  );
+  return <Typography>Authorization Page</Typography>;
 };
 
 export default AuthPage;

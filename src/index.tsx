@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthPage, DiagramPage, ExercisesPage, TemplatesPage, TrainingPage } from 'pages';
-import { Header } from 'components/common';
+import { Layout } from 'components/common';
 import { CssBaseline } from '@mui/material';
 import { NavDrawerProvider } from 'context/NavDrawer';
 
@@ -13,9 +13,9 @@ root.render(
     <BrowserRouter>
       <CssBaseline />
       <NavDrawerProvider>
-        <Header />
         <Routes>
-          <Route path={'/'}>
+          <Route path={'/'} element={<Layout />}>
+            <Route index element={<Navigate to={'/auth'} />} />
             <Route path={'auth'} element={<AuthPage />} />
             <Route path={'diagram'} element={<DiagramPage />} />
             <Route path={'training'} element={<TrainingPage />} />
