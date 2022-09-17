@@ -1,7 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { AuthPage, DiagramPage, ExercisesPage, TemplatesPage, TrainingPage } from 'pages';
+import {
+  AuthPage,
+  DiagramPage,
+  ExercisesPage,
+  TemplatesPage,
+  TrainingPage,
+  NotFoundPage,
+} from 'pages';
 import { Layout } from 'components/common';
 import { CssBaseline } from '@mui/material';
 import { NavDrawerProvider } from 'context/NavDrawer';
@@ -21,7 +28,7 @@ root.render(
             <Route path={'training'} element={<TrainingPage />} />
             <Route path={'exercises'} element={<ExercisesPage />} />
             <Route path={'templates'} element={<TemplatesPage />} />
-            <Route path={'*'} element={<Navigate to={'/auth'} />} />
+            <Route path={'*'} element={<NotFoundPage />} />
           </Route>
         </Routes>
       </NavDrawerProvider>
