@@ -23,6 +23,18 @@ const a11yProps = (index: number) => ({
   'aria-controls': `simple-tabpanel-${index}`,
 });
 
+enum TabsLabels {
+  LIGHT = 'Light Training',
+  MEDIUM = 'Medium Training',
+  HARD = 'Hard Training',
+}
+
+const shorten = (label: string) =>
+  label
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase())
+    .join('');
+
 const TemplatesTabs: FC = () => {
   const { activeId, setActiveId } = useAppContext(TemplatesTabsContext);
 
@@ -32,14 +44,23 @@ const TemplatesTabs: FC = () => {
 
   return (
     <Box>
-      <Tabs value={activeId} onChange={handleChange} aria-label="Muscles Groups">
-        <Tab label="Light Training Template" {...a11yProps(0)} />
-        <Tab label="Medium Training Template" {...a11yProps(1)} />
-        <Tab label="Hard Training Template" {...a11yProps(2)} />
+      <Tabs value={activeId} onChange={handleChange} aria-label="Training Templates">
+        <Tab
+          label={activeId === 0 ? TabsLabels.LIGHT : shorten(TabsLabels.LIGHT)}
+          {...a11yProps(0)}
+        />
+        <Tab
+          label={activeId === 1 ? TabsLabels.MEDIUM : shorten(TabsLabels.MEDIUM)}
+          {...a11yProps(1)}
+        />
+        <Tab
+          label={activeId === 2 ? TabsLabels.HARD : shorten(TabsLabels.HARD)}
+          {...a11yProps(2)}
+        />
       </Tabs>
-      <TabPanel id={0}>Light Training Template</TabPanel>
-      <TabPanel id={1}>Medium Training Template</TabPanel>
-      <TabPanel id={2}>Hard Training Template</TabPanel>
+      <TabPanel id={0}>{TabsLabels.LIGHT}</TabPanel>
+      <TabPanel id={1}>{TabsLabels.MEDIUM}</TabPanel>
+      <TabPanel id={2}>{TabsLabels.HARD}</TabPanel>
     </Box>
   );
 };
