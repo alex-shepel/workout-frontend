@@ -21,7 +21,8 @@
       "pages/*": ["./pages/*"],
       "context/*": ["./context/*"],
       "hooks/*": ["./hooks/*"],
-      "types/*": ["./types/*"]
+      "types/*": ["./types/*"],
+      "data/*": ["./data/*"]
     }
   },
   "include": ["src"]
