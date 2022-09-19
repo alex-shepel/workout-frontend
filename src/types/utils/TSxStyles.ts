@@ -1,6 +1,6 @@
-import { IMap } from 'types/utils';
+import { TMap } from 'types/utils';
 import { SxProps } from '@mui/system';
 
-type TSxStyles = IMap<SxProps>;
+type TSxStyles = TMap<SxProps>;
 
 export default TSxStyles;

@@ -10,6 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { AddGroupModal } from 'components/exercises';
 import { exercisesGroups } from 'data';
 import s from './styles';
 
@@ -20,10 +21,13 @@ const GroupPanel: FC<{ children: ReactNode }> = props => {
 
 const ExercisesTabs: FC = () => {
   const [selectedGroupId, selectGroupId] = useState(exercisesGroups[0].id);
+  const [isOpenAddGroupModal, setIsOpenAddGroupModal] = useState(exercisesGroups.length === 0);
 
   const handleChange = (event: SelectChangeEvent) => {
     selectGroupId(event.target.value);
   };
+
+  const activeGroup = exercisesGroups.find(group => group.id === selectedGroupId)!;
 
   return (
     <Box>
@@ -37,16 +41,17 @@ const ExercisesTabs: FC = () => {
           onChange={handleChange}
         >
           {exercisesGroups.map(group => (
-            <MenuItem value={group.id}>{group.title}</MenuItem>
+            <MenuItem key={group.id} value={group.id}>
+              {group.title}
+            </MenuItem>
           ))}
         </Select>
-        <Button variant={'outlined'}>
+        <Button variant={'outlined'} onClick={() => setIsOpenAddGroupModal(true)}>
           <AddIcon />
         </Button>
       </FormControl>
-      {exercisesGroups.map(
-        group => group.id === selectedGroupId && <GroupPanel>{group.description}</GroupPanel>,
-      )}
+      <GroupPanel>{activeGroup.description}</GroupPanel>
+      <AddGroupModal open={isOpenAddGroupModal} onClose={() => setIsOpenAddGroupModal(false)} />
     </Box>
   );
 };
