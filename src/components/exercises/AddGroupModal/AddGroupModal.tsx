@@ -42,7 +42,7 @@ const AddGroupModal: FC<{ open: boolean; onClose: () => void }> = props => {
   return (
     <Dialog open={open} onClose={onClose}>
       <form onSubmit={formik.handleSubmit}>
-        <DialogTitle>New Muscles Group</DialogTitle>
+        <DialogTitle>Add New Muscles Group</DialogTitle>
         <DialogContent sx={s.content}>
           <TextField
             value={formik.values.title}
