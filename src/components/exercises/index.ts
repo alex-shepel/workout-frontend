@@ -1,4 +1,5 @@
 import ExercisesTabs from './ExercisesTabs';
-import AddGroupModal from './AddGroupModal';
+import ExerciseCard from './ExerciseCard';
+import AddItemModal from './AddItemModal';
 
-export { ExercisesTabs, AddGroupModal };
+export { ExercisesTabs, ExerciseCard, AddItemModal };

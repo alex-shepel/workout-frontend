@@ -22,8 +22,12 @@ const validation = (values: TFormState): TFormErrors => {
   return errors;
 };
 
-const AddGroupModal: FC<{ open: boolean; onClose: () => void }> = props => {
-  const { open, onClose } = props;
+const AddItemModal: FC<{
+  open: boolean;
+  onClose: () => void;
+  type: 'group' | 'exercise';
+}> = props => {
+  const { open, onClose, type } = props;
 
   const handleSave = (values: TFormState, helpers: FormikHelpers<TFormState>) => {
     setTimeout(() => {
@@ -42,7 +46,9 @@ const AddGroupModal: FC<{ open: boolean; onClose: () => void }> = props => {
   return (
     <Dialog open={open} onClose={onClose}>
       <form onSubmit={formik.handleSubmit}>
-        <DialogTitle>Add New Muscles Group</DialogTitle>
+        <DialogTitle>
+          Add New Muscles {type.charAt(0).toUpperCase() + type.substring(1)}
+        </DialogTitle>
         <DialogContent sx={s.content}>
           <TextField
             value={formik.values.title}
@@ -52,7 +58,7 @@ const AddGroupModal: FC<{ open: boolean; onClose: () => void }> = props => {
             autoFocus
             id="title"
             name="title"
-            label="Group title"
+            label={`${type.charAt(0).toUpperCase() + type.substring(1)} title`}
             type="text"
             fullWidth
             variant="standard"
@@ -65,7 +71,7 @@ const AddGroupModal: FC<{ open: boolean; onClose: () => void }> = props => {
             multiline
             id="description"
             name="description"
-            label="Group description"
+            label={`${type.charAt(0).toUpperCase() + type.substring(1)} description`}
             type="textarea"
             fullWidth
             variant="standard"
@@ -82,4 +88,4 @@ const AddGroupModal: FC<{ open: boolean; onClose: () => void }> = props => {
   );
 };
 
-export default AddGroupModal;
+export default AddItemModal;
