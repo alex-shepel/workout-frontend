@@ -27,6 +27,7 @@ const ExercisesMain: FC = () => {
     data: exercisesGroups,
     isLoading,
     isError,
+    error,
   } = useQuery<TExercisesGroup[]>('exercisesGroups', apiExercisesGroups.getAll);
 
   const postExercisesGroupMutation = useMutation(apiExercisesGroups.post, {
@@ -55,11 +56,42 @@ const ExercisesMain: FC = () => {
   }, [exercisesGroups]);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <Grid container>
+        <Grid item xs={12}>
+          <Typography>Loading...</Typography>
+        </Grid>
+      </Grid>
+    );
   }
 
   if (isError) {
-    return <p>Fetch ERROR!</p>;
+    return error instanceof Error ? (
+      <Grid container>
+        <Grid item xs={12}>
+          <Typography component={'span'}>An</Typography>
+          <Typography component={'span'} color={'error.main'}>
+            {' '}
+            ERROR
+          </Typography>
+          <Typography component={'span'}>
+            {' '}
+            occurred while loading the data: {error.message}!
+          </Typography>
+        </Grid>
+      </Grid>
+    ) : (
+      <Grid container>
+        <Grid item xs={12}>
+          <Typography component={'span'}>An unknown</Typography>
+          <Typography component={'span'} color={'error.main'}>
+            {' '}
+            ERROR
+          </Typography>
+          <Typography component={'span'}> occurred while loading the data!</Typography>
+        </Grid>
+      </Grid>
+    );
   }
 
   return (
