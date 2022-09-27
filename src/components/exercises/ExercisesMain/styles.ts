@@ -1,9 +1,5 @@
 import { SxProps } from '@mui/system';
 
-const container: SxProps = {
-  mt: 2,
-};
-
 const selectForm: SxProps = {
   display: 'grid',
   gridTemplateColumns: '1fr auto',
@@ -15,6 +11,6 @@ const newExercise: SxProps = {
   justifyContent: 'center',
 };
 
-const styles = { container, selectForm, newExercise };
+const styles = { selectForm, newExercise };
 
 export default styles;

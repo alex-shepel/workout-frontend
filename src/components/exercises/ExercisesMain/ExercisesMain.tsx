@@ -63,7 +63,7 @@ const ExercisesMain: FC = () => {
   }
 
   return (
-    <Grid container rowSpacing={2} sx={s.container}>
+    <Grid container rowSpacing={2}>
       <Grid item xs={12}>
         {selectedGroupId && (
           <FormControl sx={s.selectForm} fullWidth>
