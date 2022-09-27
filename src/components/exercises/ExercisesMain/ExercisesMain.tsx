@@ -11,15 +11,10 @@ import {
 } from '@mui/material';
 import { AddItemModal, ExerciseCard } from 'components/exercises';
 import { exercises } from 'data';
-import { QueryFunction, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import { TExercisesGroup } from 'types/db';
-import axios from 'api';
+import { apiExercisesGroups } from 'api/index';
 import s from './styles';
-
-const fetchExercisesGroups: QueryFunction<TExercisesGroup[]> = async () => {
-  const { data } = await axios.get('exercises-groups');
-  return data;
-};
 
 const ExercisesMain: FC = () => {
   const [selectedGroupId, selectGroupId] = useState<number | null>(null);
@@ -28,7 +23,7 @@ const ExercisesMain: FC = () => {
 
   const { data: exercisesGroups, status } = useQuery<TExercisesGroup[]>(
     'exercisesGroups',
-    fetchExercisesGroups,
+    apiExercisesGroups.getAll,
   );
 
   const handleChange = (event: SelectChangeEvent) => {
