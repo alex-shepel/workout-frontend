@@ -8,37 +8,33 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import { TFormErrors, TFormState } from './types';
+import { TProps, TFormErrors, TFormState } from './types';
 import s from './styles';
 
 const validation = (values: TFormState): TFormErrors => {
   const errors = {} as TFormErrors;
-  if (!values.title) {
-    errors.title = 'Required';
+  if (!values.Title) {
+    errors.Title = 'Required';
   }
-  if (!values.description) {
-    errors.description = 'Required';
+  if (!values.Description) {
+    errors.Description = 'Required';
   }
   return errors;
 };
 
-const AddItemModal: FC<{
-  open: boolean;
-  onClose: () => void;
-  type: 'group' | 'exercise';
-}> = props => {
-  const { open, onClose, type } = props;
+const AddItemModal: FC<TProps> = props => {
+  const { open, onClose, onSubmit, type } = props;
 
   const handleSave = (values: TFormState, helpers: FormikHelpers<TFormState>) => {
     setTimeout(() => {
-      alert(JSON.stringify(values, null, 2));
+      onSubmit(values);
       helpers.setSubmitting(false);
     }, 400);
     onClose();
   };
 
   const formik = useFormik<TFormState>({
-    initialValues: { title: '', description: '' },
+    initialValues: { Title: '', Description: '' },
     validate: validation,
     onSubmit: handleSave,
   });
@@ -51,26 +47,26 @@ const AddItemModal: FC<{
         </DialogTitle>
         <DialogContent sx={s.content}>
           <TextField
-            value={formik.values.title}
-            error={formik.touched.title && Boolean(formik.errors.title)}
+            value={formik.values.Title}
+            error={formik.touched.Title && Boolean(formik.errors.Title)}
             onChange={formik.handleChange}
-            helperText={formik.touched.title && formik.errors.title}
+            helperText={formik.touched.Title && formik.errors.Title}
             autoFocus
-            id="title"
-            name="title"
+            id="Title"
+            name="Title"
             label={`${type.charAt(0).toUpperCase() + type.substring(1)} title`}
             type="text"
             fullWidth
             variant="standard"
           />
           <TextField
-            value={formik.values.description}
-            error={formik.touched.description && Boolean(formik.errors.description)}
+            value={formik.values.Description}
+            error={formik.touched.Description && Boolean(formik.errors.Description)}
             onChange={formik.handleChange}
-            helperText={formik.touched.description && formik.errors.description}
+            helperText={formik.touched.Description && formik.errors.Description}
             multiline
-            id="description"
-            name="description"
+            id="Description"
+            name="Description"
             label={`${type.charAt(0).toUpperCase() + type.substring(1)} description`}
             type="textarea"
             fullWidth

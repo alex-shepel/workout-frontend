@@ -1,6 +1,4 @@
-import Axios from 'axios';
-
-const axios = Axios.create({
+const Defaults = {
   baseURL:
     process.env.NODE_ENV === 'development'
       ? process.env.REACT_APP_BASEURL_DEV
@@ -11,6 +9,6 @@ const axios = Axios.create({
   },
   withCredentials: true,
   timeout: 60000,
-});
+};
 
-export default axios;
+export default Defaults;

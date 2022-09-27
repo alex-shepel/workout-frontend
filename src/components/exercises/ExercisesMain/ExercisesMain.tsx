@@ -11,9 +11,9 @@ import {
 } from '@mui/material';
 import { AddItemModal, ExerciseCard } from 'components/exercises';
 import { exercises } from 'data';
-import { useQuery } from 'react-query';
-import { TExercisesGroup } from 'types/db';
-import { apiExercisesGroups } from 'api/index';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { TExercise, TExercisesGroup } from 'types/db';
+import { apiExercisesGroups } from 'api/services';
 import s from './styles';
 
 const ExercisesMain: FC = () => {
@@ -21,13 +21,30 @@ const ExercisesMain: FC = () => {
   const [isOpenAddGroupModal, setIsOpenAddGroupModal] = useState<boolean>(false);
   const [isOpenAddExerciseModal, setIsOpenAddExerciseModal] = useState<boolean>(false);
 
-  const { data: exercisesGroups, status } = useQuery<TExercisesGroup[]>(
-    'exercisesGroups',
-    apiExercisesGroups.getAll,
-  );
+  const queryClient = useQueryClient();
+
+  const {
+    data: exercisesGroups,
+    isLoading,
+    isError,
+  } = useQuery<TExercisesGroup[]>('exercisesGroups', apiExercisesGroups.getAll);
+
+  const postExercisesGroupMutation = useMutation(apiExercisesGroups.post, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('exercisesGroups');
+    },
+  });
 
   const handleChange = (event: SelectChangeEvent) => {
     selectGroupId(Number(event.target.value));
+  };
+
+  const handleExercisesGroupSubmit = (formData: Pick<TExercisesGroup, 'Title' | 'Description'>) => {
+    postExercisesGroupMutation.mutate(formData);
+  };
+
+  const handleExerciseSubmit = (formData: Pick<TExercise, 'Title' | 'Description'>) => {
+    alert(JSON.stringify({ ...formData, GroupID: selectedGroupId }, null, 2));
   };
 
   useEffect(() => {
@@ -37,11 +54,11 @@ const ExercisesMain: FC = () => {
     }
   }, [exercisesGroups]);
 
-  if (status === 'loading') {
+  if (isLoading) {
     return <p>Loading...</p>;
   }
 
-  if (status === 'error') {
+  if (isError) {
     return <p>Fetch ERROR!</p>;
   }
 
@@ -97,11 +114,13 @@ const ExercisesMain: FC = () => {
         type={'group'}
         open={isOpenAddGroupModal}
         onClose={() => setIsOpenAddGroupModal(false)}
+        onSubmit={handleExercisesGroupSubmit}
       />
       <AddItemModal
         type={'exercise'}
         open={isOpenAddExerciseModal}
         onClose={() => setIsOpenAddExerciseModal(false)}
+        onSubmit={handleExerciseSubmit}
       />
     </Grid>
   );
