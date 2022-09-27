@@ -22,7 +22,8 @@
       "context/*": ["./context/*"],
       "hooks/*": ["./hooks/*"],
       "types/*": ["./types/*"],
-      "data/*": ["./data/*"]
+      "data/*": ["./data/*"],
+      "api/*": ["./api/*"]
     }
   },
   "include": ["src"]
