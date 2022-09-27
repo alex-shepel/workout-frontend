@@ -17,27 +17,52 @@ import { apiExercisesGroups } from 'api/services';
 import s from './styles';
 
 const ExercisesMain: FC = () => {
-  const [selectedGroupId, selectGroupId] = useState<number | null>(null);
+  const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
   const [isOpenAddGroupModal, setIsOpenAddGroupModal] = useState<boolean>(false);
   const [isOpenAddExerciseModal, setIsOpenAddExerciseModal] = useState<boolean>(false);
 
   const queryClient = useQueryClient();
 
+  const handleGetGroups = <T extends TExercisesGroup[] | undefined>(prevData: T, data: T) => {
+    if (!data) {
+      return;
+    }
+    if (data.length === 0) {
+      setIsOpenAddGroupModal(true);
+      return;
+    }
+    if (selectedGroupId === null) {
+      setSelectedGroupId(data[0].ID);
+      return;
+    }
+    if (!prevData) {
+      return;
+    }
+    if (prevData.length - data.length > 0) {
+      setSelectedGroupId(data[0].ID);
+      return;
+    }
+    if (prevData.length - data.length < 0) {
+      setSelectedGroupId(data[data.length - 1].ID);
+      return;
+    }
+  };
+
   const {
-    data: exercisesGroups,
+    data: groups,
     isLoading,
     isError,
     error,
-  } = useQuery<TExercisesGroup[]>('exercisesGroups', apiExercisesGroups.getAll);
+  } = useQuery<TExercisesGroup[]>('groups', apiExercisesGroups.getAll, {
+    onSuccess: data => handleGetGroups(groups, data),
+  });
 
   const postExercisesGroupMutation = useMutation(apiExercisesGroups.post, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('exercisesGroups');
-    },
+    onSuccess: () => queryClient.invalidateQueries('groups'),
   });
 
   const handleChange = (event: SelectChangeEvent) => {
-    selectGroupId(Number(event.target.value));
+    setSelectedGroupId(Number(event.target.value));
   };
 
   const handleExercisesGroupSubmit = (formData: Pick<TExercisesGroup, 'Title' | 'Description'>) => {
@@ -49,11 +74,11 @@ const ExercisesMain: FC = () => {
   };
 
   useEffect(() => {
-    if (exercisesGroups) {
-      setIsOpenAddGroupModal(exercisesGroups.length === 0);
-      selectGroupId(s => (s === null ? exercisesGroups[0].ID : s));
+    if (groups) {
+      setIsOpenAddGroupModal(groups.length === 0);
+      setSelectedGroupId(s => (s === null ? groups[0].ID : s));
     }
-  }, [exercisesGroups]);
+  }, [groups]);
 
   if (isLoading) {
     return (
@@ -107,7 +132,7 @@ const ExercisesMain: FC = () => {
               label="Muscles Group"
               onChange={handleChange}
             >
-              {exercisesGroups?.map(group => (
+              {groups?.map(group => (
                 <MenuItem key={group.ID} value={group.ID}>
                   {group.Title}
                 </MenuItem>
@@ -122,7 +147,7 @@ const ExercisesMain: FC = () => {
       <Grid item xs={12}>
         {selectedGroupId && (
           <Typography variant={'body2'}>
-            {exercisesGroups!.find(group => group.ID === selectedGroupId)!.Description}
+            {groups!.find(group => group.ID === selectedGroupId)!.Description}
           </Typography>
         )}
       </Grid>
