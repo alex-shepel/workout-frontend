@@ -12,10 +12,10 @@ const ExerciseCard: FC<{ exercise: TExercise }> = props => {
   return (
     <Card variant={'outlined'}>
       <CardContent>
-        <Typography variant={'subtitle1'}>{ex.title}</Typography>
+        <Typography variant={'subtitle1'}>{ex.Title}</Typography>
         {showsDescription && (
           <Typography variant={'body2'} color={'text.secondary'}>
-            {ex.description}
+            {ex.Description}
           </Typography>
         )}
       </CardContent>

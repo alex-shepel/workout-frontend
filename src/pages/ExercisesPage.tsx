@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { ExercisesTabs } from 'components/exercises';
+import { ExercisesMain } from 'components/exercises';
 
 const ExercisesPage: FC = () => {
-  return <ExercisesTabs />;
+  return <ExercisesMain />;
 };
 
 export default ExercisesPage;

@@ -1,8 +1,8 @@
 type TExercise = {
-  id: string;
-  title: string;
-  description: string;
-  groupId: string;
+  ID: number;
+  Title: string;
+  Description: string;
+  GroupID: number;
 };
 
 export default TExercise;

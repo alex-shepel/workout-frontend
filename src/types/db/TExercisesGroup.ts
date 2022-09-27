@@ -1,7 +1,7 @@
 type TExercisesGroup = {
-  id: string;
-  title: string;
-  description: string;
+  ID: number;
+  Title: string;
+  Description: string;
 };
 
 export default TExercisesGroup;
