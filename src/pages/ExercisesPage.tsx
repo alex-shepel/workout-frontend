@@ -1,8 +1,14 @@
 import React, { FC } from 'react';
-import { ExercisesMain } from 'components/exercises';
+import { ExercisesGroupSelection, ExercisesList } from 'components/exercises';
+import { ExercisesProvider } from 'context/Exercises';
 
 const ExercisesPage: FC = () => {
-  return <ExercisesMain />;
+  return (
+    <ExercisesProvider>
+      <ExercisesGroupSelection />
+      <ExercisesList />
+    </ExercisesProvider>
+  );
 };
 
 export default ExercisesPage;

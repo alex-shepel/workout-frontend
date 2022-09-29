@@ -1,5 +1,6 @@
-import ExercisesMain from './ExercisesMain';
+import ExercisesGroupSelection from './ExercisesGroupSelection';
+import ExercisesList from './ExercisesList';
 import ExerciseCard from './ExerciseCard';
 import AddItemModal from './AddItemModal';
 
-export { ExercisesMain, ExerciseCard, AddItemModal };
+export { ExercisesGroupSelection, ExercisesList, ExerciseCard, AddItemModal };

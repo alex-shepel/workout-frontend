@@ -1,7 +1,7 @@
 import { SxProps } from '@mui/system';
 
 const container: SxProps = {
-  mt: 2,
+  pt: 2,
 };
 
 const styles = { container };

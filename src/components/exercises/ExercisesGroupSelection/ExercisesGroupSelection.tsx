@@ -9,17 +9,17 @@ import {
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
-import { AddItemModal, ExerciseCard } from 'components/exercises';
-import { exercises } from 'data';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { TExercise, TExercisesGroup } from 'types/db';
+import { TExercisesGroup } from 'types/db';
 import { apiExercisesGroups } from 'api/services';
+import { AddItemModal } from 'components/exercises';
+import { useAppContext } from 'hooks';
+import { ExercisesContext } from 'context/Exercises';
 import s from './styles';
 
-const ExercisesMain: FC = () => {
-  const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
+const ExercisesGroupSelection: FC = () => {
+  const { currentGroupId, selectGroupId } = useAppContext(ExercisesContext);
   const [isOpenAddGroupModal, setIsOpenAddGroupModal] = useState<boolean>(false);
-  const [isOpenAddExerciseModal, setIsOpenAddExerciseModal] = useState<boolean>(false);
 
   const queryClient = useQueryClient();
 
@@ -31,19 +31,19 @@ const ExercisesMain: FC = () => {
       setIsOpenAddGroupModal(true);
       return;
     }
-    if (selectedGroupId === null) {
-      setSelectedGroupId(data[0].ID);
+    if (currentGroupId === null) {
+      selectGroupId(data[0].ID);
       return;
     }
     if (!prevData) {
       return;
     }
     if (prevData.length - data.length > 0) {
-      setSelectedGroupId(data[0].ID);
+      selectGroupId(data[0].ID);
       return;
     }
     if (prevData.length - data.length < 0) {
-      setSelectedGroupId(data[data.length - 1].ID);
+      selectGroupId(data[data.length - 1].ID);
       return;
     }
   };
@@ -62,23 +62,19 @@ const ExercisesMain: FC = () => {
   });
 
   const handleChange = (event: SelectChangeEvent) => {
-    setSelectedGroupId(Number(event.target.value));
+    selectGroupId(Number(event.target.value));
   };
 
   const handleExercisesGroupSubmit = (formData: Pick<TExercisesGroup, 'Title' | 'Description'>) => {
     postExercisesGroupMutation.mutate(formData);
   };
 
-  const handleExerciseSubmit = (formData: Pick<TExercise, 'Title' | 'Description'>) => {
-    alert(JSON.stringify({ ...formData, GroupID: selectedGroupId }, null, 2));
-  };
-
   useEffect(() => {
     if (groups) {
       setIsOpenAddGroupModal(groups.length === 0);
-      setSelectedGroupId(s => (s === null ? groups[0].ID : s));
+      selectGroupId(s => (s === null ? groups[0].ID : s));
     }
-  }, [groups]);
+  }, [groups, selectGroupId]);
 
   if (isLoading) {
     return (
@@ -120,15 +116,15 @@ const ExercisesMain: FC = () => {
   }
 
   return (
-    <Grid container rowSpacing={2}>
+    <Grid container mb={2} rowSpacing={2}>
       <Grid item xs={12}>
-        {selectedGroupId && (
+        {currentGroupId && (
           <FormControl sx={s.selectForm} fullWidth>
             <InputLabel id="muscles-group-select-label">Muscles Group</InputLabel>
             <Select
               labelId="muscles-group-select-label"
               id="muscles-group-select"
-              value={String(selectedGroupId)}
+              value={String(currentGroupId)}
               label="Muscles Group"
               onChange={handleChange}
             >
@@ -145,27 +141,11 @@ const ExercisesMain: FC = () => {
         )}
       </Grid>
       <Grid item xs={12}>
-        {selectedGroupId && (
+        {currentGroupId && (
           <Typography variant={'body2'}>
-            {groups!.find(group => group.ID === selectedGroupId)!.Description}
+            {groups!.find(group => group.ID === currentGroupId)!.Description}
           </Typography>
         )}
-      </Grid>
-      <Grid item xs={12}>
-        <Grid container rowSpacing={1}>
-          {exercises
-            .filter(ex => ex.GroupID === selectedGroupId)
-            .map(ex => (
-              <Grid key={ex.ID} xs={12} item>
-                <ExerciseCard exercise={ex} />
-              </Grid>
-            ))}
-        </Grid>
-      </Grid>
-      <Grid item xs={12} sx={s.newExercise}>
-        <Button variant={'outlined'} onClick={() => setIsOpenAddExerciseModal(true)}>
-          Add Exercise
-        </Button>
       </Grid>
       <AddItemModal
         type={'group'}
@@ -173,14 +153,8 @@ const ExercisesMain: FC = () => {
         onClose={() => setIsOpenAddGroupModal(false)}
         onSubmit={handleExercisesGroupSubmit}
       />
-      <AddItemModal
-        type={'exercise'}
-        open={isOpenAddExerciseModal}
-        onClose={() => setIsOpenAddExerciseModal(false)}
-        onSubmit={handleExerciseSubmit}
-      />
     </Grid>
   );
 };
 
-export default ExercisesMain;
+export default ExercisesGroupSelection;
