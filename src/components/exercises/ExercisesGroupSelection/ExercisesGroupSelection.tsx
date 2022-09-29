@@ -118,7 +118,7 @@ const ExercisesGroupSelection: FC = () => {
   return (
     <Grid container mb={2} rowSpacing={2}>
       <Grid item xs={12}>
-        {currentGroupId && (
+        {currentGroupId !== null && (
           <FormControl sx={s.selectForm} fullWidth>
             <InputLabel id="muscles-group-select-label">Muscles Group</InputLabel>
             <Select
@@ -141,9 +141,9 @@ const ExercisesGroupSelection: FC = () => {
         )}
       </Grid>
       <Grid item xs={12}>
-        {currentGroupId && (
+        {currentGroupId !== null && (
           <Typography variant={'body2'}>
-            {groups!.find(group => group.ID === currentGroupId)!.Description}
+            {groups?.find(group => group.ID === currentGroupId)?.Description}
           </Typography>
         )}
       </Grid>
