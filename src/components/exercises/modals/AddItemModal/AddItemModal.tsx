@@ -30,6 +30,7 @@ const AddItemModal: FC<TProps> = props => {
       onSubmit(values);
       helpers.setSubmitting(false);
     }, 400);
+    formik.resetForm();
     onClose();
   };
 
