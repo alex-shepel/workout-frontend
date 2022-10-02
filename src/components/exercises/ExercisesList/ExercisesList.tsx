@@ -1,7 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
 import { TExercise } from 'types/db';
 import { Button, Grid, Typography } from '@mui/material';
-import { AddItemModal, ExerciseCard } from 'components/exercises';
+import { ExerciseCard } from 'components/exercises';
+import { AddItemModal } from 'components/exercises/modals';
 import { useAppContext } from 'hooks';
 import { ExercisesContext } from 'context/Exercises';
 import { useMutation, useQuery, useQueryClient } from 'react-query';

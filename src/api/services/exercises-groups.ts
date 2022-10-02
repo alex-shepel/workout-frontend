@@ -1,22 +1,23 @@
-import Axios from 'axios';
-import { Defaults } from 'api/axios';
+import { Axios } from 'api/axios';
 import { TExercisesGroup } from 'types/db';
 
-const axios = Axios.create({
-  ...Defaults,
-  baseURL: [Defaults.baseURL, 'exercises-groups'].join('/'),
-});
+const API_ENDPOINT = 'exercises-groups';
 
 const getAll = async (): Promise<TExercisesGroup[]> => {
-  const { data } = await axios.get('');
+  const { data } = await Axios.get(API_ENDPOINT);
   return data;
 };
 
 const post = async (
   payload: Pick<TExercisesGroup, 'Title' | 'Description'>,
 ): Promise<TExercisesGroup> => {
-  const { data } = await axios.post('', payload);
+  const { data } = await Axios.post(API_ENDPOINT, payload);
   return data;
 };
 
-export { getAll, post };
+const deleteById = async (id: number): Promise<TExercisesGroup> => {
+  const { data } = await Axios.delete(`${API_ENDPOINT}/${id}`);
+  return data;
+};
+
+export { getAll, post, deleteById };

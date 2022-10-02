@@ -1,4 +1,4 @@
 import Defaults from './defaults';
-import instance from './instance';
+import Axios from './instance';
 
-export { Defaults, instance };
+export { Defaults, Axios };

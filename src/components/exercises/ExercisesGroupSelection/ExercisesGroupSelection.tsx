@@ -12,14 +12,17 @@ import {
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { TExercisesGroup } from 'types/db';
 import { apiExercisesGroups } from 'api/services';
-import { AddItemModal } from 'components/exercises';
+import { AddItemModal, DeleteConfirmationModal } from 'components/exercises/modals';
 import { useAppContext } from 'hooks';
 import { ExercisesContext } from 'context/Exercises';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 import s from './styles';
 
 const ExercisesGroupSelection: FC = () => {
   const { currentGroupId, selectGroupId } = useAppContext(ExercisesContext);
   const [isOpenAddGroupModal, setIsOpenAddGroupModal] = useState<boolean>(false);
+  const [isOpenDeleteGroupModal, setIsOpenDeleteGroupModal] = useState<boolean>(false);
 
   const queryClient = useQueryClient();
 
@@ -61,6 +64,10 @@ const ExercisesGroupSelection: FC = () => {
     onSuccess: () => queryClient.invalidateQueries('groups'),
   });
 
+  const deleteExerciseGroupMutation = useMutation(apiExercisesGroups.deleteById, {
+    onSuccess: () => queryClient.invalidateQueries('groups'),
+  });
+
   const handleChange = (event: SelectChangeEvent) => {
     selectGroupId(Number(event.target.value));
   };
@@ -68,6 +75,8 @@ const ExercisesGroupSelection: FC = () => {
   const handleExercisesGroupSubmit = (formData: Pick<TExercisesGroup, 'Title' | 'Description'>) => {
     postExercisesGroupMutation.mutate(formData);
   };
+
+  const handleExercisesGroupDelete = () => deleteExerciseGroupMutation.mutate(currentGroupId!);
 
   useEffect(() => {
     if (groups) {
@@ -117,9 +126,16 @@ const ExercisesGroupSelection: FC = () => {
 
   return (
     <Grid container mb={2} rowSpacing={2}>
-      <Grid item xs={12}>
-        {currentGroupId !== null && (
-          <FormControl sx={s.selectForm} fullWidth>
+      {currentGroupId !== null && (
+        <Grid item xs={12} sx={s.selectForm}>
+          <Button
+            variant={'outlined'}
+            color={'error'}
+            onClick={() => setIsOpenDeleteGroupModal(true)}
+          >
+            <DeleteIcon />
+          </Button>
+          <FormControl fullWidth>
             <InputLabel id="muscles-group-select-label">Muscles Group</InputLabel>
             <Select
               labelId="muscles-group-select-label"
@@ -134,12 +150,12 @@ const ExercisesGroupSelection: FC = () => {
                 </MenuItem>
               ))}
             </Select>
-            <Button variant={'outlined'} onClick={() => setIsOpenAddGroupModal(true)}>
-              Add Group
-            </Button>
           </FormControl>
-        )}
-      </Grid>
+          <Button variant={'outlined'} onClick={() => setIsOpenAddGroupModal(true)}>
+            <AddIcon />
+          </Button>
+        </Grid>
+      )}
       <Grid item xs={12}>
         {currentGroupId !== null && (
           <Typography variant={'body2'}>
@@ -152,6 +168,12 @@ const ExercisesGroupSelection: FC = () => {
         open={isOpenAddGroupModal}
         onClose={() => setIsOpenAddGroupModal(false)}
         onSubmit={handleExercisesGroupSubmit}
+      />
+      <DeleteConfirmationModal
+        goal={'group'}
+        open={isOpenDeleteGroupModal}
+        onConfirm={handleExercisesGroupDelete}
+        onClose={() => setIsOpenDeleteGroupModal(false)}
       />
     </Grid>
   );

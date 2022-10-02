@@ -2,7 +2,7 @@ import { SxProps } from '@mui/system';
 
 const selectForm: SxProps = {
   display: 'grid',
-  gridTemplateColumns: '1fr auto',
+  gridTemplateColumns: 'auto 1fr auto',
   gridGap: 8,
 };
 
