@@ -22,6 +22,7 @@
     "start": "cross-env NODE_ENV=production react-scripts start",
     "start:dev": "cross-env NODE_ENV=development react-scripts start"
   },
+  "proxy": "http://localhost:5000",
   "browserslist": {
     "production": [
       ">0.2%",
