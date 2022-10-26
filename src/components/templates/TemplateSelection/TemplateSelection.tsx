@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
   Button,
   FormControl,
@@ -15,25 +16,79 @@ import { useAppContext } from 'hooks';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { TemplatesContext } from 'context/Templates';
+import { apiTemplates } from 'api/services';
 import s from './styles';
-
-const templates: TTemplate[] = [
-  { ID: 1, Title: 'Hard', Description: 'The hard trainings template' },
-  { ID: 2, Title: 'Easy', Description: 'The easy trainings template' },
-];
 
 const TemplateSelection: FC = () => {
   const { currentTemplateId, selectTemplateId } = useAppContext(TemplatesContext);
   const [isOpenAddTemplateModal, setIsOpenAddTemplateModal] = useState<boolean>(false);
   const [isOpenDeleteTemplateModal, setIsOpenDeleteTemplateModal] = useState<boolean>(false);
 
-  useEffect(() => {
-    selectTemplateId(templates[0].ID);
-  }, [selectTemplateId]);
+  const queryClient = useQueryClient();
+
+  const handleGetTemplates = <T extends TTemplate[] | undefined>(prevData: T, data: T) => {
+    if (!data) {
+      return;
+    }
+    if (data.length === 0) {
+      setIsOpenAddTemplateModal(true);
+      return;
+    }
+    if (currentTemplateId === null) {
+      selectTemplateId(data[0].ID);
+      return;
+    }
+    if (!prevData) {
+      return;
+    }
+    if (prevData.length - data.length > 0) {
+      selectTemplateId(data[0].ID);
+      return;
+    }
+    if (prevData.length - data.length < 0) {
+      selectTemplateId(data[data.length - 1].ID);
+      return;
+    }
+  };
+
+  const { data: templates, isLoading } = useQuery<TTemplate[]>('templates', apiTemplates.getAll, {
+    onSuccess: data => handleGetTemplates(templates, data),
+  });
+
+  const { mutate: postTemplate, isLoading: isPosting } = useMutation(apiTemplates.post, {
+    onSuccess: () => queryClient.invalidateQueries('templates'),
+  });
+
+  const { mutate: deleteTemplate, isLoading: isDeleting } = useMutation(apiTemplates.deleteById, {
+    onSuccess: () => queryClient.invalidateQueries('templates'),
+  });
 
   const handleChange = (event: SelectChangeEvent) => {
     selectTemplateId(Number(event.target.value));
   };
+
+  const handleTemplateSubmit = (formData: Pick<TTemplate, 'Title' | 'Description'>) => {
+    postTemplate(formData);
+  };
+
+  const handleTemplateDelete = () => deleteTemplate(currentTemplateId!);
+
+  useEffect(() => {
+    if (templates) {
+      setIsOpenAddTemplateModal(templates.length === 0);
+      selectTemplateId(s => (s === null ? templates[0].ID : s));
+    }
+  }, [templates, selectTemplateId]);
+
+  if (isLoading || isPosting || isDeleting) {
+    return (
+      <Grid container>
+        <Grid item xs={12}>
+          <Typography>Loading...</Typography>
+        </Grid>
+      </Grid>
+    );
+  }
 
   return (
     <Grid container mb={2} rowSpacing={2}>
@@ -78,12 +133,12 @@ const TemplateSelection: FC = () => {
         goal={'Template'}
         open={isOpenAddTemplateModal}
         onClose={() => setIsOpenAddTemplateModal(false)}
-        onSubmit={console.log}
+        onSubmit={handleTemplateSubmit}
       />
       <DeleteConfirmationModal
         goal={'Template'}
         open={isOpenDeleteTemplateModal}
-        onConfirm={console.log}
+        onConfirm={handleTemplateDelete}
         onClose={() => setIsOpenDeleteTemplateModal(false)}
       />
     </Grid>
