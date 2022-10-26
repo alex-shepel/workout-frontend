@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
-import { TemplatesTabs } from 'components/templates';
-import { TemplatesTabsProvider } from 'context/TemplatesTabs';
+import { TemplatesProvider } from 'context/Templates';
+import { TemplateSelection } from 'components/templates';
 
 const TemplatesPage: FC = () => {
   return (
-    <TemplatesTabsProvider>
-      <TemplatesTabs />
-    </TemplatesTabsProvider>
+    <TemplatesProvider>
+      <TemplateSelection />
+    </TemplatesProvider>
   );
 };
 

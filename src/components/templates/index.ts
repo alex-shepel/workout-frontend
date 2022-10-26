@@ -1,3 +1,3 @@
-import TemplatesTabs from './TemplatesTabs';
+import TemplateSelection from './TemplateSelection';
 
-export { TemplatesTabs };
+export { TemplateSelection };
