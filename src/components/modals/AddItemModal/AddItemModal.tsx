@@ -8,7 +8,7 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import { TProps, TFormErrors, TFormState } from './types';
+import { IProps, TFormErrors, TFormState } from './types';
 import s from './styles';
 
 const validation = (values: TFormState): TFormErrors => {
@@ -22,8 +22,8 @@ const validation = (values: TFormState): TFormErrors => {
   return errors;
 };
 
-const AddItemModal: FC<TProps> = props => {
-  const { open, onClose, onSubmit, type } = props;
+const AddItemModal: FC<IProps> = props => {
+  const { open, onClose, onSubmit, goal } = props;
 
   const handleSave = (values: TFormState, helpers: FormikHelpers<TFormState>) => {
     setTimeout(() => {
@@ -43,9 +43,7 @@ const AddItemModal: FC<TProps> = props => {
   return (
     <Dialog open={open} onClose={onClose}>
       <form onSubmit={formik.handleSubmit}>
-        <DialogTitle>
-          Add New Muscles {type.charAt(0).toUpperCase() + type.substring(1)}
-        </DialogTitle>
+        <DialogTitle>Add New {goal}</DialogTitle>
         <DialogContent sx={s.content}>
           <TextField
             value={formik.values.Title}
@@ -55,7 +53,7 @@ const AddItemModal: FC<TProps> = props => {
             autoFocus
             id="Title"
             name="Title"
-            label={`${type.charAt(0).toUpperCase() + type.substring(1)} title`}
+            label={`${goal} title`}
             type="text"
             fullWidth
             variant="standard"
@@ -68,7 +66,7 @@ const AddItemModal: FC<TProps> = props => {
             multiline
             id="Description"
             name="Description"
-            label={`${type.charAt(0).toUpperCase() + type.substring(1)} description`}
+            label={`${goal} description`}
             type="textarea"
             fullWidth
             variant="standard"

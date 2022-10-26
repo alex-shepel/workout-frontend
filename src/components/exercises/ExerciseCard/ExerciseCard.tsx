@@ -6,7 +6,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useMutation, useQueryClient } from 'react-query';
 import { apiExercises } from 'api/services';
-import { DeleteConfirmationModal } from 'components/exercises/modals';
+import { DeleteConfirmationModal } from 'components/modals';
 import s from './styles';
 
 const ExerciseCard: FC<{ exercise: TExercise }> = props => {
@@ -49,7 +49,7 @@ const ExerciseCard: FC<{ exercise: TExercise }> = props => {
         </IconButton>
       </CardActions>
       <DeleteConfirmationModal
-        goal={'exercise'}
+        goal={'Exercise'}
         open={isOpenDeleteExerciseModal}
         onConfirm={handleExerciseDelete}
         onClose={() => setIsOpenDeleteExerciseModal(false)}

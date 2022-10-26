@@ -1,11 +1,11 @@
 import { TExercise, TExercisesGroup } from 'types/db';
 
-type TProps = {
+interface IProps {
   open: boolean;
   onClose: () => void;
-  type: 'group' | 'exercise';
+  goal: 'Group' | 'Exercise' | 'Template';
   onSubmit: (data: TFormState) => void;
-};
+}
 
 type TFormState =
   | Pick<TExercisesGroup, 'Title' | 'Description'>
@@ -13,4 +13,4 @@ type TFormState =
 
 type TFormErrors = Record<keyof TFormState, string>;
 
-export type { TProps, TFormState, TFormErrors };
+export type { IProps, TFormState, TFormErrors };

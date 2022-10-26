@@ -12,7 +12,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { TExercisesGroup } from 'types/db';
 import { apiExercisesGroups } from 'api/services';
-import { AddItemModal, DeleteConfirmationModal } from 'components/exercises/modals';
+import { AddItemModal, DeleteConfirmationModal } from 'components/modals';
 import { useAppContext } from 'hooks';
 import { ExercisesContext } from 'context/Exercises';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -134,13 +134,13 @@ const ExercisesGroupSelection: FC = () => {
         )}
       </Grid>
       <AddItemModal
-        type={'group'}
+        goal={'Group'}
         open={isOpenAddGroupModal}
         onClose={() => setIsOpenAddGroupModal(false)}
         onSubmit={handleExercisesGroupSubmit}
       />
       <DeleteConfirmationModal
-        goal={'group'}
+        goal={'Group'}
         open={isOpenDeleteGroupModal}
         onConfirm={handleExercisesGroupDelete}
         onClose={() => setIsOpenDeleteGroupModal(false)}

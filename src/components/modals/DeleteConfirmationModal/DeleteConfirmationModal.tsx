@@ -5,9 +5,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import React, { FC } from 'react';
-import { TProps } from './types';
+import { IProps } from './types';
 
-const DeleteConfirmationModal: FC<TProps> = props => {
+const DeleteConfirmationModal: FC<IProps> = props => {
   const { goal, open, onConfirm, onClose } = props;
   const handleConfirm = () => {
     onConfirm();
