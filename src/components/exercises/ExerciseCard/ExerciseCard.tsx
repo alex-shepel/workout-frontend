@@ -10,25 +10,33 @@ import { DeleteConfirmationModal } from 'components/modals';
 import s from './styles';
 
 const ExerciseCard: FC<{ exercise: TExercise }> = props => {
-  const { exercise: ex } = props;
+  const { exercise } = props;
   const [showsDescription, setShowsDescription] = useState<boolean>(false);
   const [isOpenDeleteExerciseModal, setIsOpenDeleteExerciseModal] = useState<boolean>(false);
 
   const queryClient = useQueryClient();
 
-  const deleteExerciseMutation = useMutation(apiExercises.deleteById, {
+  const { mutate: deleteExercise, isLoading: isDeleting } = useMutation(apiExercises.deleteById, {
     onSuccess: () => queryClient.invalidateQueries('exercises'),
   });
 
-  const handleExerciseDelete = () => deleteExerciseMutation.mutate(ex.ID);
+  if (isDeleting) {
+    return (
+      <Card variant={'outlined'}>
+        <CardContent>
+          <Typography>Deleting...</Typography>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card variant={'outlined'}>
       <CardContent>
-        <Typography variant={'subtitle1'}>{ex.Title}</Typography>
+        <Typography variant={'subtitle1'}>{exercise.Title}</Typography>
         {showsDescription && (
           <Typography variant={'body2'} color={'text.secondary'}>
-            {ex.Description}
+            {exercise.Description}
           </Typography>
         )}
       </CardContent>
@@ -51,7 +59,7 @@ const ExerciseCard: FC<{ exercise: TExercise }> = props => {
       <DeleteConfirmationModal
         goal={'Exercise'}
         open={isOpenDeleteExerciseModal}
-        onConfirm={handleExerciseDelete}
+        onConfirm={() => deleteExercise(exercise.ID)}
         onClose={() => setIsOpenDeleteExerciseModal(false)}
       />
     </Card>

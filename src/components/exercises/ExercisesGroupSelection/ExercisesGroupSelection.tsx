@@ -59,23 +59,29 @@ const ExercisesGroupSelection: FC = () => {
     },
   );
 
-  const postExercisesGroupMutation = useMutation(apiExercisesGroups.post, {
-    onSuccess: () => queryClient.invalidateQueries('groups'),
-  });
+  const { mutate: postExercisesGroup, isLoading: isPosting } = useMutation(
+    apiExercisesGroups.post,
+    {
+      onSuccess: () => queryClient.invalidateQueries('groups'),
+    },
+  );
 
-  const deleteExerciseGroupMutation = useMutation(apiExercisesGroups.deleteById, {
-    onSuccess: () => queryClient.invalidateQueries('groups'),
-  });
+  const { mutate: deleteExerciseGroup, isLoading: isDeleting } = useMutation(
+    apiExercisesGroups.deleteById,
+    {
+      onSuccess: () => queryClient.invalidateQueries('groups'),
+    },
+  );
 
   const handleChange = (event: SelectChangeEvent) => {
     selectGroupId(Number(event.target.value));
   };
 
   const handleExercisesGroupSubmit = (formData: Pick<TExercisesGroup, 'Title' | 'Description'>) => {
-    postExercisesGroupMutation.mutate(formData);
+    postExercisesGroup(formData);
   };
 
-  const handleExercisesGroupDelete = () => deleteExerciseGroupMutation.mutate(currentGroupId!);
+  const handleExercisesGroupDelete = () => deleteExerciseGroup(currentGroupId!);
 
   useEffect(() => {
     if (groups) {
@@ -84,7 +90,7 @@ const ExercisesGroupSelection: FC = () => {
     }
   }, [groups, selectGroupId]);
 
-  if (isLoading) {
+  if (isLoading || isPosting || isDeleting) {
     return (
       <Grid container>
         <Grid item xs={12}>

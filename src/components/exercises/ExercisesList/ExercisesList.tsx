@@ -15,12 +15,7 @@ const ExercisesList: FC = () => {
 
   const queryClient = useQueryClient();
 
-  const {
-    data: exercises,
-    isLoading,
-    isError,
-    error,
-  } = useQuery<TExercise[]>(
+  const { data: exercises, isLoading } = useQuery<TExercise[]>(
     ['exercises', currentGroupId],
     () => apiExercises.getByGroupId(currentGroupId!),
     {
@@ -28,12 +23,12 @@ const ExercisesList: FC = () => {
     },
   );
 
-  const postExerciseMutation = useMutation(apiExercises.post, {
+  const { mutate: postExercise, isLoading: isPosting } = useMutation(apiExercises.post, {
     onSuccess: () => queryClient.invalidateQueries('exercises'),
   });
 
   const handleExerciseSubmit = (formData: Pick<TExercise, 'Title' | 'Description'>) => {
-    postExerciseMutation.mutate({ ...formData, GroupID: currentGroupId! });
+    postExercise({ ...formData, GroupID: currentGroupId! });
   };
 
   useEffect(() => {
@@ -42,40 +37,11 @@ const ExercisesList: FC = () => {
     }
   }, [currentGroupId, queryClient]);
 
-  if (isLoading) {
+  if (isLoading || isPosting) {
     return (
       <Grid container>
         <Grid item xs={12}>
           <Typography>Loading...</Typography>
-        </Grid>
-      </Grid>
-    );
-  }
-
-  if (isError) {
-    return error instanceof Error ? (
-      <Grid container>
-        <Grid item xs={12}>
-          <Typography component={'span'}>An</Typography>
-          <Typography component={'span'} color={'error.main'}>
-            {' '}
-            ERROR
-          </Typography>
-          <Typography component={'span'}>
-            {' '}
-            occurred while loading the data: {error.message}!
-          </Typography>
-        </Grid>
-      </Grid>
-    ) : (
-      <Grid container>
-        <Grid item xs={12}>
-          <Typography component={'span'}>An unknown</Typography>
-          <Typography component={'span'} color={'error.main'}>
-            {' '}
-            ERROR
-          </Typography>
-          <Typography component={'span'}> occurred while loading the data!</Typography>
         </Grid>
       </Grid>
     );
