@@ -51,14 +51,13 @@ const ExercisesGroupSelection: FC = () => {
     }
   };
 
-  const {
-    data: groups,
-    isLoading,
-    isError,
-    error,
-  } = useQuery<TExercisesGroup[]>('groups', apiExercisesGroups.getAll, {
-    onSuccess: data => handleGetGroups(groups, data),
-  });
+  const { data: groups, isLoading } = useQuery<TExercisesGroup[]>(
+    'groups',
+    apiExercisesGroups.getAll,
+    {
+      onSuccess: data => handleGetGroups(groups, data),
+    },
+  );
 
   const postExercisesGroupMutation = useMutation(apiExercisesGroups.post, {
     onSuccess: () => queryClient.invalidateQueries('groups'),
@@ -90,35 +89,6 @@ const ExercisesGroupSelection: FC = () => {
       <Grid container>
         <Grid item xs={12}>
           <Typography>Loading...</Typography>
-        </Grid>
-      </Grid>
-    );
-  }
-
-  if (isError) {
-    return error instanceof Error ? (
-      <Grid container>
-        <Grid item xs={12}>
-          <Typography component={'span'}>An</Typography>
-          <Typography component={'span'} color={'error.main'}>
-            {' '}
-            ERROR
-          </Typography>
-          <Typography component={'span'}>
-            {' '}
-            occurred while loading the data: {error.message}!
-          </Typography>
-        </Grid>
-      </Grid>
-    ) : (
-      <Grid container>
-        <Grid item xs={12}>
-          <Typography component={'span'}>An unknown</Typography>
-          <Typography component={'span'} color={'error.main'}>
-            {' '}
-            ERROR
-          </Typography>
-          <Typography component={'span'}> occurred while loading the data!</Typography>
         </Grid>
       </Grid>
     );
