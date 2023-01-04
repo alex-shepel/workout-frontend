@@ -10,8 +10,8 @@ import {
   Typography,
 } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { TExercisesGroup } from 'types/db';
-import { apiExercisesGroups } from 'api/services';
+import { GroupEntity } from 'types/entities';
+import { apiGroups } from 'api/services';
 import { AddItemModal, DeleteConfirmationModal } from 'components/modals';
 import { useAppContext } from 'hooks';
 import { ExercisesContext } from 'context/Exercises';
@@ -26,7 +26,7 @@ const ExercisesGroupSelection: FC = () => {
 
   const queryClient = useQueryClient();
 
-  const handleGetGroups = <T extends TExercisesGroup[] | undefined>(prevData: T, data: T) => {
+  const handleGetGroups = <T extends GroupEntity[] | undefined>(prevData: T, data: T) => {
     if (!data) {
       return;
     }
@@ -51,43 +51,32 @@ const ExercisesGroupSelection: FC = () => {
     }
   };
 
-  const { data: groups, isLoading } = useQuery<TExercisesGroup[]>(
-    'groups',
-    apiExercisesGroups.getAll,
-    {
-      onSuccess: data => handleGetGroups(groups, data),
-    },
-  );
+  const { data: groups, isLoading } = useQuery<GroupEntity[]>('groups', apiGroups.getAll, {
+    onSuccess: data => handleGetGroups(groups, data),
+  });
 
-  const { mutate: postExercisesGroup, isLoading: isPosting } = useMutation(
-    apiExercisesGroups.post,
-    {
-      onSuccess: () => queryClient.invalidateQueries('groups'),
-    },
-  );
+  const { mutate: postExercisesGroup, isLoading: isPosting } = useMutation(apiGroups.post, {
+    onSuccess: () => queryClient.invalidateQueries('groups'),
+  });
 
-  const { mutate: deleteExerciseGroup, isLoading: isDeleting } = useMutation(
-    apiExercisesGroups.deleteById,
-    {
-      onSuccess: () => queryClient.invalidateQueries('groups'),
-    },
-  );
+  const { mutate: deleteExerciseGroup, isLoading: isDeleting } = useMutation(apiGroups.deleteById, {
+    onSuccess: () => queryClient.invalidateQueries('groups'),
+  });
 
   const handleChange = (event: SelectChangeEvent) => {
-    selectGroupId(Number(event.target.value));
+    selectGroupId(event.target.value);
   };
 
-  const handleExercisesGroupSubmit = (formData: Pick<TExercisesGroup, 'Title' | 'Description'>) => {
+  const handleExercisesGroupSubmit = (formData: Pick<GroupEntity, 'Title' | 'Description'>) => {
     postExercisesGroup(formData);
   };
 
   const handleExercisesGroupDelete = () => deleteExerciseGroup(currentGroupId!);
 
   useEffect(() => {
-    if (groups) {
-      setIsOpenAddGroupModal(groups.length === 0);
-      selectGroupId(s => (s === null ? groups[0].ID : s));
-    }
+    if (!groups) return;
+    if (groups.length === 0) setIsOpenAddGroupModal(true);
+    if (groups.length > 0) selectGroupId(s => (s === null ? groups[0].ID : s));
   }, [groups, selectGroupId]);
 
   if (isLoading || isPosting || isDeleting) {

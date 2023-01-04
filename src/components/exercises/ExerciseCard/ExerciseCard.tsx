@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { TExercise } from 'types/db';
+import { SimplifiedExerciseEntity } from 'types/entities';
 import { Button, Card, CardActions, CardContent, IconButton, Typography } from '@mui/material';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -9,7 +9,7 @@ import { apiExercises } from 'api/services';
 import { DeleteConfirmationModal } from 'components/modals';
 import s from './styles';
 
-const ExerciseCard: FC<{ exercise: TExercise }> = props => {
+const ExerciseCard: FC<{ exercise: SimplifiedExerciseEntity }> = props => {
   const { exercise } = props;
   const [showsDescription, setShowsDescription] = useState<boolean>(false);
   const [isOpenDeleteExerciseModal, setIsOpenDeleteExerciseModal] = useState<boolean>(false);

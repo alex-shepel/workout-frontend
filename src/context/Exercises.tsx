@@ -7,16 +7,17 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import { GroupEntity } from 'types/entities';
 
 interface Context {
-  currentGroupId: number | null;
-  selectGroupId: Dispatch<SetStateAction<number | null>>;
+  currentGroupId: GroupEntity['ID'] | null;
+  selectGroupId: Dispatch<SetStateAction<GroupEntity['ID'] | null>>;
 }
 
 const ExercisesContext = createContext<Context | null>(null);
 
 const ExercisesProvider: FC<{ children: ReactNode }> = props => {
-  const [currentGroupId, selectGroupId] = useState<number | null>(null);
+  const [currentGroupId, selectGroupId] = useState<GroupEntity['ID'] | null>(null);
 
   const context = useMemo<Context>(() => ({ currentGroupId, selectGroupId }), [currentGroupId]);
 

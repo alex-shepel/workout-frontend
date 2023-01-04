@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { TExercise } from 'types/db';
+import { SimplifiedExerciseEntity } from 'types/entities';
 import { Button, Grid, Typography } from '@mui/material';
 import { ExerciseCard } from 'components/exercises';
 import { AddItemModal } from 'components/modals';
@@ -15,7 +15,7 @@ const ExercisesList: FC = () => {
 
   const queryClient = useQueryClient();
 
-  const { data: exercises, isLoading } = useQuery<TExercise[]>(
+  const { data: exercises, isLoading } = useQuery<SimplifiedExerciseEntity[]>(
     ['exercises', currentGroupId],
     () => apiExercises.getByGroupId(currentGroupId!),
     {
@@ -27,7 +27,9 @@ const ExercisesList: FC = () => {
     onSuccess: () => queryClient.invalidateQueries('exercises'),
   });
 
-  const handleExerciseSubmit = (formData: Pick<TExercise, 'Title' | 'Description'>) => {
+  const handleExerciseSubmit = (
+    formData: Pick<SimplifiedExerciseEntity, 'Title' | 'Description'>,
+  ) => {
     postExercise({ ...formData, GroupID: currentGroupId! });
   };
 

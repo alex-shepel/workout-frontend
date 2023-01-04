@@ -10,7 +10,7 @@ import {
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
-import { TTemplate } from 'types/db';
+import { SimplifiedTemplateEntity } from 'types/entities';
 import { AddItemModal, DeleteConfirmationModal } from 'components/modals';
 import { useAppContext } from 'hooks';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -26,7 +26,10 @@ const TemplateSelection: FC = () => {
 
   const queryClient = useQueryClient();
 
-  const handleGetTemplates = <T extends TTemplate[] | undefined>(prevData: T, data: T) => {
+  const handleGetTemplates = <T extends SimplifiedTemplateEntity[] | undefined>(
+    prevData: T,
+    data: T,
+  ) => {
     if (!data) {
       return;
     }
@@ -51,9 +54,13 @@ const TemplateSelection: FC = () => {
     }
   };
 
-  const { data: templates, isLoading } = useQuery<TTemplate[]>('templates', apiTemplates.getAll, {
-    onSuccess: data => handleGetTemplates(templates, data),
-  });
+  const { data: templates, isLoading } = useQuery<SimplifiedTemplateEntity[]>(
+    'templates',
+    apiTemplates.getAll,
+    {
+      onSuccess: data => handleGetTemplates(templates, data),
+    },
+  );
 
   const { mutate: postTemplate, isLoading: isPosting } = useMutation(apiTemplates.post, {
     onSuccess: () => queryClient.invalidateQueries('templates'),
@@ -64,20 +71,21 @@ const TemplateSelection: FC = () => {
   });
 
   const handleChange = (event: SelectChangeEvent) => {
-    selectTemplateId(Number(event.target.value));
+    selectTemplateId(event.target.value);
   };
 
-  const handleTemplateSubmit = (formData: Pick<TTemplate, 'Title' | 'Description'>) => {
+  const handleTemplateSubmit = (
+    formData: Pick<SimplifiedTemplateEntity, 'Title' | 'Description'>,
+  ) => {
     postTemplate(formData);
   };
 
   const handleTemplateDelete = () => deleteTemplate(currentTemplateId!);
 
   useEffect(() => {
-    if (templates) {
-      setIsOpenAddTemplateModal(templates.length === 0);
-      selectTemplateId(s => (s === null ? templates[0].ID : s));
-    }
+    if (!templates) return;
+    if (templates.length === 0) setIsOpenAddTemplateModal(templates.length === 0);
+    if (templates.length > 0) selectTemplateId(s => (s === null ? templates[0].ID : s));
   }, [templates, selectTemplateId]);
 
   if (isLoading || isPosting || isDeleting) {

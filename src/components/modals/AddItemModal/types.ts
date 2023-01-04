@@ -1,4 +1,4 @@
-import { TExercise, TExercisesGroup } from 'types/db';
+import { ExerciseEntity, GroupEntity } from 'types/entities';
 
 interface IProps {
   open: boolean;
@@ -8,8 +8,8 @@ interface IProps {
 }
 
 type TFormState =
-  | Pick<TExercisesGroup, 'Title' | 'Description'>
-  | Pick<TExercise, 'Title' | 'Description'>;
+  | Pick<GroupEntity, 'Title' | 'Description'>
+  | Pick<ExerciseEntity, 'Title' | 'Description'>;
 
 type TFormErrors = Record<keyof TFormState, string>;
 

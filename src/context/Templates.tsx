@@ -7,16 +7,17 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import { TemplateEntity } from 'types/entities';
 
 interface Context {
-  currentTemplateId: number | null;
-  selectTemplateId: Dispatch<SetStateAction<number | null>>;
+  currentTemplateId: TemplateEntity['ID'] | null;
+  selectTemplateId: Dispatch<SetStateAction<TemplateEntity['ID'] | null>>;
 }
 
 const TemplatesContext = createContext<Context | null>(null);
 
 const TemplatesProvider: FC<{ children: ReactNode }> = props => {
-  const [currentTemplateId, selectTemplateId] = useState<number | null>(null);
+  const [currentTemplateId, selectTemplateId] = useState<TemplateEntity['ID'] | null>(null);
 
   const context = useMemo<Context>(
     () => ({ currentTemplateId, selectTemplateId }),

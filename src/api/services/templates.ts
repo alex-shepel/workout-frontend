@@ -1,19 +1,21 @@
 import { Axios } from 'api/axios';
-import { TTemplate } from 'types/db';
+import { SimplifiedTemplateEntity, TemplateEntity } from 'types/entities';
 
 const API_ENDPOINT = 'templates';
 
-const getAll = async (): Promise<TTemplate[]> => {
+const getAll = async (): Promise<SimplifiedTemplateEntity[]> => {
   const { data } = await Axios.get(API_ENDPOINT);
   return data;
 };
 
-const post = async (payload: Pick<TTemplate, 'Title' | 'Description'>): Promise<TTemplate> => {
+const post = async (
+  payload: Pick<TemplateEntity, 'Title' | 'Description'>,
+): Promise<TemplateEntity> => {
   const { data } = await Axios.post(API_ENDPOINT, payload);
   return data;
 };
 
-const deleteById = async (id: number): Promise<TTemplate> => {
+const deleteById = async (id: TemplateEntity['ID']): Promise<SimplifiedTemplateEntity> => {
   const { data } = await Axios.delete(`${API_ENDPOINT}/${id}`);
   return data;
 };

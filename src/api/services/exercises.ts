@@ -1,22 +1,22 @@
 import { Axios } from 'api/axios';
-import { TExercise } from 'types/db';
+import { SimplifiedExerciseEntity, GroupEntity, ExerciseEntity } from 'types/entities';
 
 const API_ENDPOINT = 'exercises';
 
-const getByGroupId = async (groupId: number): Promise<TExercise[]> => {
+const getByGroupId = async (groupId: GroupEntity['ID']): Promise<SimplifiedExerciseEntity[]> => {
   const params = { groupId };
   const { data } = await Axios.get(API_ENDPOINT, { params });
   return data;
 };
 
 const post = async (
-  payload: Pick<TExercise, 'Title' | 'Description' | 'GroupID'>,
-): Promise<TExercise> => {
+  payload: Pick<SimplifiedExerciseEntity, 'Title' | 'Description' | 'GroupID'>,
+): Promise<SimplifiedExerciseEntity> => {
   const { data } = await Axios.post(API_ENDPOINT, payload);
   return data;
 };
 
-const deleteById = async (id: number): Promise<TExercise> => {
+const deleteById = async (id: ExerciseEntity['ID']): Promise<SimplifiedExerciseEntity> => {
   const { data } = await Axios.delete(`${API_ENDPOINT}/${id}`);
   return data;
 };
