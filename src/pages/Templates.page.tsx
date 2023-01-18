@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
-import { TemplatesProvider } from 'context/Templates';
+import { TemplatesProvider } from 'context/Templates.context';
 import { TemplateSelection } from 'components/templates';
 import GroupedExercisesAccordion from 'components/templates/GroupedExercisesAccordions/GroupedExercisesAccordion';
 import { useQuery } from 'react-query';
 import { GroupEntity } from 'types/entities';
-import { apiGroups } from 'api/services';
+import { useGroupsService } from 'hooks/services';
 
 const TemplatesPage: FC = () => {
-  const { data: groups } = useQuery<GroupEntity[]>('groups', apiGroups.getAll);
+  const groupsService = useGroupsService();
+  const { data: groups } = useQuery<GroupEntity[]>('groups', groupsService.getAll);
 
   return (
     <TemplatesProvider>

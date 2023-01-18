@@ -4,10 +4,10 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { SimplifiedExerciseEntity, GroupEntity } from 'types/entities';
-import { apiExercises } from 'api/services';
+import { GroupEntity, SimplifiedExerciseEntity } from 'types/entities';
 import { useQuery } from 'react-query';
 import { Box, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
+import { useExercisesService } from 'hooks/services';
 import s from './styles';
 
 interface Props {
@@ -17,9 +17,11 @@ interface Props {
 const GroupedExercisesAccordion: FC<Props> = props => {
   const { group } = props;
 
+  const exercisesService = useExercisesService();
+
   const { data: exercises, isLoading } = useQuery<SimplifiedExerciseEntity[]>(
     ['exercises', group.ID],
-    () => apiExercises.getByGroupId(group.ID),
+    () => exercisesService.getByGroupId(group.ID),
   );
 
   if (exercises && exercises.length === 0) return null;

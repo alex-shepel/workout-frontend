@@ -1,17 +1,10 @@
-import React, {
-  createContext,
-  Dispatch,
-  FC,
-  ReactNode,
-  SetStateAction,
-  useMemo,
-  useState,
-} from 'react';
+import React, { createContext, FC, ReactNode, useMemo, useState } from 'react';
 import { TemplateEntity } from 'types/entities';
+import { StateSetter } from 'types/utils';
 
 interface Context {
   currentTemplateId: TemplateEntity['ID'] | null;
-  selectTemplateId: Dispatch<SetStateAction<TemplateEntity['ID'] | null>>;
+  selectTemplateId: StateSetter<TemplateEntity['ID'] | null>;
 }
 
 const TemplatesContext = createContext<Context | null>(null);

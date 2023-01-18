@@ -1,10 +1,22 @@
-import { TSxStyles } from 'types/utils';
+import { SxProps } from '@mui/system';
 
-const styles: TSxStyles = {
-  toolbar: {
-    display: 'grid',
-    gridTemplateColumns: 'auto 1fr auto',
+const toolbar: SxProps = {
+  '& > button': {
+    margin: 0,
+    padding: 0,
   },
 };
+
+const commonToolbar: SxProps = {
+  ...toolbar,
+  justifyContent: 'space-between',
+};
+
+const authToolbar: SxProps = {
+  ...toolbar,
+  justifyContent: 'center',
+};
+
+const styles = { commonToolbar, authToolbar };
 
 export default styles;

@@ -3,27 +3,28 @@ import { SimplifiedExerciseEntity } from 'types/entities';
 import { Button, Grid, Typography } from '@mui/material';
 import { ExerciseCard } from 'components/exercises';
 import { AddItemModal } from 'components/modals';
-import { useAppContext } from 'hooks';
-import { ExercisesContext } from 'context/Exercises';
+import { useAppContext } from 'hooks/utils';
+import { ExercisesContext } from 'context/Exercises.context';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { apiExercises } from 'api/services';
+import { useExercisesService } from 'hooks/services';
 import s from './styles';
 
 const ExercisesList: FC = () => {
   const { currentGroupId } = useAppContext(ExercisesContext);
   const [isOpenAddExerciseModal, setIsOpenAddExerciseModal] = useState<boolean>(false);
 
+  const exercisesService = useExercisesService();
   const queryClient = useQueryClient();
 
   const { data: exercises, isLoading } = useQuery<SimplifiedExerciseEntity[]>(
     ['exercises', currentGroupId],
-    () => apiExercises.getByGroupId(currentGroupId!),
+    () => exercisesService.getByGroupId(currentGroupId!),
     {
       enabled: currentGroupId !== null,
     },
   );
 
-  const { mutate: postExercise, isLoading: isPosting } = useMutation(apiExercises.post, {
+  const { mutate: postExercise, isLoading: isPosting } = useMutation(exercisesService.post, {
     onSuccess: () => queryClient.invalidateQueries('exercises'),
   });
 

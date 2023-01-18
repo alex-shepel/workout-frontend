@@ -5,8 +5,8 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useMutation, useQueryClient } from 'react-query';
-import { apiExercises } from 'api/services';
 import { DeleteConfirmationModal } from 'components/modals';
+import { useExercisesService } from 'hooks/services';
 import s from './styles';
 
 const ExerciseCard: FC<{ exercise: SimplifiedExerciseEntity }> = props => {
@@ -14,11 +14,15 @@ const ExerciseCard: FC<{ exercise: SimplifiedExerciseEntity }> = props => {
   const [showsDescription, setShowsDescription] = useState<boolean>(false);
   const [isOpenDeleteExerciseModal, setIsOpenDeleteExerciseModal] = useState<boolean>(false);
 
+  const exercisesService = useExercisesService();
   const queryClient = useQueryClient();
 
-  const { mutate: deleteExercise, isLoading: isDeleting } = useMutation(apiExercises.deleteById, {
-    onSuccess: () => queryClient.invalidateQueries('exercises'),
-  });
+  const { mutate: deleteExercise, isLoading: isDeleting } = useMutation(
+    exercisesService.deleteById,
+    {
+      onSuccess: () => queryClient.invalidateQueries('exercises'),
+    },
+  );
 
   if (isDeleting) {
     return (

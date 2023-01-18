@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import { NavDrawerContext } from 'context/NavDrawer';
+import { NavDrawerContext } from 'context/NavDrawer.context';
 import { List, ListItem, SwipeableDrawer } from '@mui/material';
-import { useAppContext } from 'hooks/index';
+import { useAppContext } from 'hooks/utils';
 import { Link } from 'components/common';
 
 const NavDrawer: FC = () => {

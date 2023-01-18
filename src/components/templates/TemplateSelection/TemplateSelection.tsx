@@ -12,14 +12,15 @@ import {
 } from '@mui/material';
 import { SimplifiedTemplateEntity } from 'types/entities';
 import { AddItemModal, DeleteConfirmationModal } from 'components/modals';
-import { useAppContext } from 'hooks';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import { TemplatesContext } from 'context/Templates';
-import { apiTemplates } from 'api/services';
+import { TemplatesContext } from 'context/Templates.context';
+import { useAppContext } from 'hooks/utils';
+import { useTemplatesService } from 'hooks/services';
 import s from './styles';
 
 const TemplateSelection: FC = () => {
+  const templatesService = useTemplatesService();
   const { currentTemplateId, selectTemplateId } = useAppContext(TemplatesContext);
   const [isOpenAddTemplateModal, setIsOpenAddTemplateModal] = useState<boolean>(false);
   const [isOpenDeleteTemplateModal, setIsOpenDeleteTemplateModal] = useState<boolean>(false);
@@ -56,28 +57,21 @@ const TemplateSelection: FC = () => {
 
   const { data: templates, isLoading } = useQuery<SimplifiedTemplateEntity[]>(
     'templates',
-    apiTemplates.getAll,
-    {
-      onSuccess: data => handleGetTemplates(templates, data),
-    },
+    templatesService.getAll,
+    { onSuccess: data => handleGetTemplates(templates, data) },
   );
 
-  const { mutate: postTemplate, isLoading: isPosting } = useMutation(apiTemplates.post, {
+  const { mutate: postTemplate, isLoading: isPosting } = useMutation(templatesService.post, {
     onSuccess: () => queryClient.invalidateQueries('templates'),
   });
 
-  const { mutate: deleteTemplate, isLoading: isDeleting } = useMutation(apiTemplates.deleteById, {
-    onSuccess: () => queryClient.invalidateQueries('templates'),
-  });
+  const { mutate: deleteTemplate, isLoading: isDeleting } = useMutation(
+    templatesService.deleteById,
+    { onSuccess: () => queryClient.invalidateQueries('templates') },
+  );
 
   const handleChange = (event: SelectChangeEvent) => {
     selectTemplateId(event.target.value);
-  };
-
-  const handleTemplateSubmit = (
-    formData: Pick<SimplifiedTemplateEntity, 'Title' | 'Description'>,
-  ) => {
-    postTemplate(formData);
   };
 
   const handleTemplateDelete = () => deleteTemplate(currentTemplateId!);
@@ -141,7 +135,7 @@ const TemplateSelection: FC = () => {
         goal={'Template'}
         open={isOpenAddTemplateModal}
         onClose={() => setIsOpenAddTemplateModal(false)}
-        onSubmit={handleTemplateSubmit}
+        onSubmit={postTemplate}
       />
       <DeleteConfirmationModal
         goal={'Template'}

@@ -1,4 +1,4 @@
-import { GroupEntity, TemplateEntity, UserEntity } from 'types/entities';
+import { AuthEntity, GroupEntity, TemplateEntity } from 'types/entities';
 
 type ExerciseEntity = {
   ID: string;
@@ -6,7 +6,7 @@ type ExerciseEntity = {
   Description: string;
   Group?: GroupEntity;
   Templates?: TemplateEntity[];
-  User?: UserEntity;
+  User?: AuthEntity;
 };
 
 export default ExerciseEntity;

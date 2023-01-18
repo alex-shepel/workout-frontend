@@ -1,5 +1,6 @@
 enum Paths {
-  AUTH = 'auth',
+  LOGIN = 'login',
+  REGISTER = 'register',
   DIAGRAM = 'diagram',
   TRAINING = 'training',
   EXERCISES = 'exercises',

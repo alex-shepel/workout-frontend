@@ -1,4 +1,3 @@
-import TSxStyles from './TSxStyles';
-import TStateSetter from './TStateSetter';
+import StateSetter from './StateSetter';
 
-export type { TSxStyles, TStateSetter };
+export type { StateSetter };

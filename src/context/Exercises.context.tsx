@@ -1,17 +1,10 @@
-import React, {
-  createContext,
-  Dispatch,
-  FC,
-  ReactNode,
-  SetStateAction,
-  useMemo,
-  useState,
-} from 'react';
+import React, { createContext, FC, ReactNode, useMemo, useState } from 'react';
 import { GroupEntity } from 'types/entities';
+import { StateSetter } from 'types/utils';
 
 interface Context {
   currentGroupId: GroupEntity['ID'] | null;
-  selectGroupId: Dispatch<SetStateAction<GroupEntity['ID'] | null>>;
+  selectGroupId: StateSetter<GroupEntity['ID'] | null>;
 }
 
 const ExercisesContext = createContext<Context | null>(null);

@@ -11,12 +11,12 @@ import {
 } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { GroupEntity } from 'types/entities';
-import { apiGroups } from 'api/services';
 import { AddItemModal, DeleteConfirmationModal } from 'components/modals';
-import { useAppContext } from 'hooks';
-import { ExercisesContext } from 'context/Exercises';
+import { useAppContext } from 'hooks/utils';
+import { ExercisesContext } from 'context/Exercises.context';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import { useGroupsService } from 'hooks/services';
 import s from './styles';
 
 const ExercisesGroupSelection: FC = () => {
@@ -24,6 +24,7 @@ const ExercisesGroupSelection: FC = () => {
   const [isOpenAddGroupModal, setIsOpenAddGroupModal] = useState<boolean>(false);
   const [isOpenDeleteGroupModal, setIsOpenDeleteGroupModal] = useState<boolean>(false);
 
+  const groupsService = useGroupsService();
   const queryClient = useQueryClient();
 
   const handleGetGroups = <T extends GroupEntity[] | undefined>(prevData: T, data: T) => {
@@ -51,24 +52,23 @@ const ExercisesGroupSelection: FC = () => {
     }
   };
 
-  const { data: groups, isLoading } = useQuery<GroupEntity[]>('groups', apiGroups.getAll, {
+  const { data: groups, isLoading } = useQuery<GroupEntity[]>('groups', groupsService.getAll, {
     onSuccess: data => handleGetGroups(groups, data),
   });
 
-  const { mutate: postExercisesGroup, isLoading: isPosting } = useMutation(apiGroups.post, {
+  const { mutate: postExercisesGroup, isLoading: isPosting } = useMutation(groupsService.post, {
     onSuccess: () => queryClient.invalidateQueries('groups'),
   });
 
-  const { mutate: deleteExerciseGroup, isLoading: isDeleting } = useMutation(apiGroups.deleteById, {
-    onSuccess: () => queryClient.invalidateQueries('groups'),
-  });
+  const { mutate: deleteExerciseGroup, isLoading: isDeleting } = useMutation(
+    groupsService.deleteById,
+    {
+      onSuccess: () => queryClient.invalidateQueries('groups'),
+    },
+  );
 
   const handleChange = (event: SelectChangeEvent) => {
     selectGroupId(event.target.value);
-  };
-
-  const handleExercisesGroupSubmit = (formData: Pick<GroupEntity, 'Title' | 'Description'>) => {
-    postExercisesGroup(formData);
   };
 
   const handleExercisesGroupDelete = () => deleteExerciseGroup(currentGroupId!);
@@ -132,7 +132,7 @@ const ExercisesGroupSelection: FC = () => {
         goal={'Group'}
         open={isOpenAddGroupModal}
         onClose={() => setIsOpenAddGroupModal(false)}
-        onSubmit={handleExercisesGroupSubmit}
+        onSubmit={postExercisesGroup}
       />
       <DeleteConfirmationModal
         goal={'Group'}

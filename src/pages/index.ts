@@ -1,8 +1,17 @@
-import AuthPage from './AuthPage';
-import DiagramPage from './DiagramPage';
-import TrainingPage from './TrainingPage';
-import ExercisesPage from './ExercisesPage';
-import TemplatesPage from './TemplatesPage';
-import NotFoundPage from './NotFoundPage';
+import LoginPage from './Login.page';
+import RegisterPage from './Register.page';
+import DiagramPage from './Diagram.page';
+import TrainingPage from './Training.page';
+import ExercisesPage from './Exercises.page';
+import TemplatesPage from './Templates.page';
+import NotFoundPage from './NotFound.page';
 
-export { AuthPage, DiagramPage, TrainingPage, ExercisesPage, TemplatesPage, NotFoundPage };
+export {
+  LoginPage,
+  RegisterPage,
+  DiagramPage,
+  TrainingPage,
+  ExercisesPage,
+  TemplatesPage,
+  NotFoundPage,
+};

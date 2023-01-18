@@ -3,11 +3,17 @@ import { SxProps } from '@mui/system';
 const content: SxProps = {
   display: 'grid',
   gridTemplateColumns: '1fr',
-  gridTemplateRows: 'auto auto',
   rowGap: 2,
-  mb: 1,
+  '& > button': {
+    marginTop: 2,
+  },
 };
 
-const styles = { content };
+const primaryButton: SxProps = {
+  display: 'flex',
+  gap: 1,
+};
+
+const styles = { content, primaryButton };
 
 export default styles;
