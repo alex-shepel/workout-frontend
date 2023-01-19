@@ -13,7 +13,7 @@ import {
 import { Layout } from 'components/common';
 import { CssBaseline } from '@mui/material';
 import { NavDrawerProvider } from 'context/NavDrawer.context';
-import { Paths } from 'types/enums';
+import { Path } from 'types/enums';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import ErrorBoundary from 'components/common/ErrorBoundary';
@@ -33,13 +33,13 @@ root.render(
             <NavDrawerProvider>
               <Routes>
                 <Route path={'/'} element={<Layout />}>
-                  <Route index element={<Navigate to={`/${Paths.REGISTER}`} />} />
-                  <Route path={Paths.LOGIN} element={<LoginPage />} />
-                  <Route path={Paths.REGISTER} element={<RegisterPage />} />
-                  <Route path={Paths.DIAGRAM} element={<DiagramPage />} />
-                  <Route path={Paths.TRAINING} element={<TrainingPage />} />
-                  <Route path={Paths.EXERCISES} element={<ExercisesPage />} />
-                  <Route path={Paths.TEMPLATES} element={<TemplatesPage />} />
+                  <Route index element={<Navigate to={`/${Path.LOGIN}`} />} />
+                  <Route path={Path.LOGIN} element={<LoginPage />} />
+                  <Route path={Path.REGISTER} element={<RegisterPage />} />
+                  <Route path={Path.DIAGRAM} element={<DiagramPage />} />
+                  <Route path={Path.TRAINING} element={<TrainingPage />} />
+                  <Route path={Path.EXERCISES} element={<ExercisesPage />} />
+                  <Route path={Path.TEMPLATES} element={<TemplatesPage />} />
                   <Route path={'*'} element={<NotFoundPage />} />
                 </Route>
               </Routes>

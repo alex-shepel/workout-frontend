@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { FormikHelpers, useFormik } from 'formik';
 import { LoginFormErrors, LoginFormValues } from './types';
 import { Link, useNavigate } from 'react-router-dom';
-import { Paths } from 'types/enums';
+import { Path } from 'types/enums';
 import { Box, Button, CircularProgress, TextField } from '@mui/material';
 import { useMutation } from 'react-query';
 import { useAuthService } from 'hooks/services';
@@ -81,7 +81,7 @@ const LoginForm: FC = () => {
           Login
           {isAuthing && <CircularProgress size={12} color={'inherit'} />}
         </Button>
-        <Button component={Link} to={`/${Paths.REGISTER}`}>
+        <Button component={Link} to={`/${Path.REGISTER}`}>
           Register
         </Button>
       </Box>

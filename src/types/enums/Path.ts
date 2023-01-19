@@ -1,4 +1,4 @@
-enum Paths {
+enum Path {
   LOGIN = 'login',
   REGISTER = 'register',
   DIAGRAM = 'diagram',
@@ -7,4 +7,4 @@ enum Paths {
   TEMPLATES = 'templates',
 }
 
-export default Paths;
+export default Path;

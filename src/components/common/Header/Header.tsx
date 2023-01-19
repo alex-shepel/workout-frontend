@@ -1,32 +1,30 @@
 import React, { FC } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AppBar, Box, CircularProgress, IconButton, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { NavDrawer } from 'components/common';
-import { useAppContext } from 'hooks/utils';
+import { useAppContext, usePage } from 'hooks/utils';
 import { NavDrawerContext } from 'context/NavDrawer.context';
-import { Paths } from 'types/enums';
+import { Path } from 'types/enums';
 import { useAuthService } from 'hooks/services';
 import { useMutation } from 'react-query';
 import { AuthContext } from 'context/Auth.context';
 import s from './styles';
 
 const usePathTitle = () => {
-  const location = useLocation();
-  const routes = location.pathname.split('/');
-  const page = routes[1] as Paths;
+  const page = usePage();
   switch (page) {
-    case Paths.LOGIN:
-    case Paths.REGISTER:
+    case Path.LOGIN:
+    case Path.REGISTER:
       return 'Authentication';
-    case Paths.DIAGRAM:
+    case Path.DIAGRAM:
       return 'Diagram';
-    case Paths.TRAINING:
+    case Path.TRAINING:
       return 'Training';
-    case Paths.EXERCISES:
+    case Path.EXERCISES:
       return 'Exercises';
-    case Paths.TEMPLATES:
+    case Path.TEMPLATES:
       return 'Templates';
     default:
       return 'Workout';

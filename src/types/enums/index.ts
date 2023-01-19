@@ -1,3 +1,3 @@
-import Paths from './Paths';
+import Path from './Path';
 
-export { Paths };
+export { Path };

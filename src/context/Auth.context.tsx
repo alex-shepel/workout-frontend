@@ -1,4 +1,5 @@
 import React, { createContext, FC, ReactNode, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AuthEntity } from 'types/entities';
 import { StateSetter } from 'types/utils';
 import { AxiosRequestHeaders } from 'axios';
@@ -14,6 +15,7 @@ const AuthContext = createContext<Context | null>(null);
 
 const AuthProvider: FC<{ children: ReactNode }> = props => {
   const axios = useAxios();
+  const navigate = useNavigate();
   const authService = useAuthService();
 
   const [data, setData] = useState<AuthEntity | null>(null);
@@ -33,15 +35,20 @@ const AuthProvider: FC<{ children: ReactNode }> = props => {
     const responseInterceptorId = axios.interceptors.response.use(
       response => response,
       async error => {
-        const newConfig = error.config;
-        if (error.response?.status === 401 && !newConfig?.sent) {
-          newConfig.sent = true;
+        const isNotAuth = error.response?.status === 401;
+        const isRefresh = error.request.responseURL.includes('api/auth/refresh');
+        if (isNotAuth && isRefresh) {
+          setData(null);
+          navigate('/login');
+          return Promise.reject(error);
+        }
+        if (isNotAuth && !error.config?.sent) {
+          const updatedConfig = { ...error.config, sent: true };
           const user = await authService.refresh();
           setData(user);
-          newConfig.headers['Authorization'] = `Bearer ${user.AccessToken}`;
-          return axios(newConfig);
+          updatedConfig.headers['Authorization'] = `Bearer ${user.AccessToken}`;
+          return await axios(updatedConfig);
         }
-        setData(null);
         return Promise.reject(error);
       },
     );
@@ -50,7 +57,7 @@ const AuthProvider: FC<{ children: ReactNode }> = props => {
       axios.interceptors.request.eject(requestInterceptorId);
       axios.interceptors.response.eject(responseInterceptorId);
     };
-  }, [authService, axios, data?.AccessToken]);
+  }, [authService, axios, data?.AccessToken, navigate]);
 
   const context = useMemo<Context>(() => ({ data, setData }), [data]);
 
