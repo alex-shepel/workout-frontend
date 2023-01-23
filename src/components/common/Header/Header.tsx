@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { AppBar, Box, CircularProgress, IconButton, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -9,7 +8,6 @@ import { NavDrawerContext } from 'context/NavDrawer.context';
 import { Path } from 'types/enums';
 import { useAuthService } from 'hooks/services';
 import { useMutation } from 'react-query';
-import { AuthContext } from 'context/Auth.context';
 import s from './styles';
 
 const usePathTitle = () => {
@@ -33,17 +31,10 @@ const usePathTitle = () => {
 
 const Header: FC = () => {
   const navDrawer = useAppContext(NavDrawerContext);
-  const authContext = useAppContext(AuthContext);
   const title = usePathTitle();
   const authService = useAuthService();
-  const navigate = useNavigate();
 
-  const { mutate: logout, isLoading: isAuthing } = useMutation(authService.logout, {
-    onSuccess: () => {
-      authContext.setData(null);
-      navigate('/login');
-    },
-  });
+  const { mutate: logout, isLoading: isAuthing } = useMutation(authService.logout);
 
   return (
     <Box>

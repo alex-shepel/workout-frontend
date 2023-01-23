@@ -1,13 +1,11 @@
 import React, { FC } from 'react';
 import { FormikHelpers, useFormik } from 'formik';
 import { RegisterFormErrors, RegisterFormValues } from './types';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Path } from 'types/enums';
 import { Box, Button, CircularProgress, TextField } from '@mui/material';
 import { useMutation } from 'react-query';
 import { useAuthService } from 'hooks/services';
-import { AuthContext } from 'context/Auth.context';
-import { useAppContext } from 'hooks/utils';
 import s from './styles';
 
 const validate = (values: RegisterFormValues): RegisterFormErrors => {
@@ -27,16 +25,9 @@ const validate = (values: RegisterFormValues): RegisterFormErrors => {
 };
 
 const RegisterForm: FC = () => {
-  const navigate = useNavigate();
   const authService = useAuthService();
-  const authContext = useAppContext(AuthContext);
 
-  const { mutate: register, isLoading: isAuthing } = useMutation(authService.register, {
-    onSuccess: data => {
-      authContext.setData(data);
-      navigate('/diagram', { replace: true });
-    },
-  });
+  const { mutate: register, isLoading: isAuthing } = useMutation(authService.register);
 
   const submit = (values: RegisterFormValues, helpers: FormikHelpers<RegisterFormValues>) => {
     register(values);

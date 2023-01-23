@@ -1,13 +1,11 @@
 import React, { FC } from 'react';
 import { FormikHelpers, useFormik } from 'formik';
 import { LoginFormErrors, LoginFormValues } from './types';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Path } from 'types/enums';
 import { Box, Button, CircularProgress, TextField } from '@mui/material';
 import { useMutation } from 'react-query';
 import { useAuthService } from 'hooks/services';
-import { AuthContext } from 'context/Auth.context';
-import { useAppContext } from 'hooks/utils';
 import s from './styles';
 
 const validate = (values: LoginFormValues): LoginFormErrors => {
@@ -22,16 +20,9 @@ const validate = (values: LoginFormValues): LoginFormErrors => {
 };
 
 const LoginForm: FC = () => {
-  const navigate = useNavigate();
   const authService = useAuthService();
-  const authContext = useAppContext(AuthContext);
 
-  const { mutate: login, isLoading: isAuthing } = useMutation(authService.login, {
-    onSuccess: data => {
-      authContext.setData(data);
-      navigate('/diagram', { replace: true });
-    },
-  });
+  const { mutate: login, isLoading: isAuthing } = useMutation(authService.login);
 
   const submit = async (values: LoginFormValues, helpers: FormikHelpers<LoginFormValues>) => {
     login(values);
