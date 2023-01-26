@@ -4,7 +4,7 @@ type TemplateEntity = {
   ID: string;
   Title: string;
   Description: string;
-  Exercises: ExerciseEntity[];
+  Exercises?: ExerciseEntity[];
 };
 
 export default TemplateEntity;

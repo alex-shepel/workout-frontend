@@ -4,10 +4,17 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { GroupEntity, SimplifiedExerciseEntity } from 'types/entities';
-import { useQuery } from 'react-query';
-import { Box, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
-import { useExercisesService } from 'hooks/services';
+import {
+  ExerciseEntity,
+  GroupEntity,
+  SimplifiedExerciseEntity,
+  SimplifiedTemplateEntity,
+} from 'types/entities';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
+import { useExercisesService, useTemplatesService } from 'hooks/services';
+import { useAppContext } from 'hooks/utils';
+import { TemplatesContext } from 'context/Templates.context';
 import s from './styles';
 
 interface Props {
@@ -17,11 +24,37 @@ interface Props {
 const GroupedExercisesAccordion: FC<Props> = props => {
   const { group } = props;
 
-  const exercisesService = useExercisesService();
+  const { currentTemplateId } = useAppContext(TemplatesContext);
+  const templateId = currentTemplateId || '';
 
-  const { data: exercises, isLoading } = useQuery<SimplifiedExerciseEntity[]>(
+  const queryClient = useQueryClient();
+
+  const exercisesService = useExercisesService();
+  const templatesService = useTemplatesService();
+
+  const { data: exercises, isLoading: areExercisesLoading } = useQuery<SimplifiedExerciseEntity[]>(
     ['exercises', group.ID],
     () => exercisesService.getByGroupId(group.ID),
+  );
+
+  const { data: template, isLoading: areRelationsLoading } = useQuery<SimplifiedTemplateEntity>(
+    ['template-with-exercises', templateId],
+    () => templatesService.getRelatedExercises(templateId),
+    {
+      enabled: templateId !== '',
+    },
+  );
+
+  const { mutate: relateExercise } = useMutation(
+    (payload: { exerciseId: ExerciseEntity['ID']; areRelated: boolean }) =>
+      templatesService.relateExercise({
+        ExerciseID: payload.exerciseId,
+        TemplateID: templateId,
+        AreRelated: payload.areRelated,
+      }),
+    {
+      onSuccess: () => queryClient.invalidateQueries(['template-with-exercises', templateId]),
+    },
   );
 
   if (exercises && exercises.length === 0) return null;
@@ -36,22 +69,36 @@ const GroupedExercisesAccordion: FC<Props> = props => {
         <Typography>{group.Title}</Typography>
       </AccordionSummary>
       <AccordionDetails>
-        {isLoading && <Typography>Loading...</Typography>}
-        {!isLoading &&
-          exercises?.map(exercise => (
-            <FormGroup sx={s.checkboxRow} key={exercise.ID}>
-              <FormControlLabel
-                sx={s.checkboxLabel}
-                control={<Checkbox sx={s.checkboxIcon} defaultChecked />}
-                label={
-                  <Box>
-                    <Typography>{exercise.Title}</Typography>
-                    <Typography variant={'caption'}>{exercise.Description}</Typography>
-                  </Box>
-                }
-              />
-            </FormGroup>
-          ))}
+        {areExercisesLoading || areRelationsLoading ? (
+          <Typography>Loading...</Typography>
+        ) : (
+          exercises?.map(exercise => {
+            const areRelated = template?.ExercisesIDs.includes(exercise.ID);
+            return (
+              <FormGroup sx={s.checkboxRow} key={exercise.ID}>
+                <FormControlLabel
+                  sx={s.checkboxLabel}
+                  control={
+                    <Checkbox
+                      sx={s.checkboxIcon}
+                      checked={areRelated}
+                      onChange={() =>
+                        relateExercise({ exerciseId: exercise.ID, areRelated: !areRelated })
+                      }
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                  }
+                  label={
+                    <>
+                      <Typography>{exercise.Title}</Typography>
+                      <Typography variant={'caption'}>{exercise.Description}</Typography>
+                    </>
+                  }
+                />
+              </FormGroup>
+            );
+          })
+        )}
       </AccordionDetails>
     </Accordion>
   );

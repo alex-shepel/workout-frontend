@@ -10,7 +10,7 @@ import {
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
-import { SimplifiedTemplateEntity } from 'types/entities';
+import { TemplateEntity } from 'types/entities';
 import { AddItemModal, DeleteConfirmationModal } from 'components/modals';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -27,10 +27,7 @@ const TemplateSelection: FC = () => {
 
   const queryClient = useQueryClient();
 
-  const handleGetTemplates = <T extends SimplifiedTemplateEntity[] | undefined>(
-    prevData: T,
-    data: T,
-  ) => {
+  const handleGetTemplates = <T extends TemplateEntity[] | undefined>(prevData: T, data: T) => {
     if (!data) {
       return;
     }
@@ -55,7 +52,7 @@ const TemplateSelection: FC = () => {
     }
   };
 
-  const { data: templates, isLoading } = useQuery<SimplifiedTemplateEntity[]>(
+  const { data: templates, isLoading } = useQuery<TemplateEntity[]>(
     'templates',
     templatesService.getAll,
     { onSuccess: data => handleGetTemplates(templates, data) },

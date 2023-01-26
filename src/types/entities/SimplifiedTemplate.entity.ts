@@ -1,10 +1,7 @@
-import { SimplifiedExerciseEntity } from 'types/entities';
+import { ExerciseEntity, TemplateEntity } from 'types/entities';
 
-type SimplifiedTemplateEntity = {
-  ID: string;
-  Title: string;
-  Description: string;
-  ExercisesIDs: SimplifiedExerciseEntity['ID'];
+type SimplifiedTemplateEntity = Pick<TemplateEntity, 'ID' | 'Title' | 'Description'> & {
+  ExercisesIDs: Array<ExerciseEntity['ID']>;
 };
 
 export default SimplifiedTemplateEntity;
