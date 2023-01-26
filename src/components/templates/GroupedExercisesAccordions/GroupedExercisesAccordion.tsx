@@ -16,10 +16,13 @@ import { useExercisesService, useTemplatesService } from 'hooks/services';
 import { useAppContext } from 'hooks/utils';
 import { TemplatesContext } from 'context/Templates.context';
 import s from './styles';
+import { ExtraServiceKey } from 'types/utils';
 
 interface Props {
   group: GroupEntity;
 }
+
+const TEMPLATES_QUERY_KEY: ExtraServiceKey<typeof useTemplatesService> = 'templates-with-exercises';
 
 const GroupedExercisesAccordion: FC<Props> = props => {
   const { group } = props;
@@ -33,12 +36,12 @@ const GroupedExercisesAccordion: FC<Props> = props => {
   const templatesService = useTemplatesService();
 
   const { data: exercises, isLoading: areExercisesLoading } = useQuery<SimplifiedExerciseEntity[]>(
-    ['exercises', group.ID],
+    [exercisesService.endpoint, group.ID],
     () => exercisesService.getByGroupId(group.ID),
   );
 
   const { data: template, isLoading: areRelationsLoading } = useQuery<SimplifiedTemplateEntity>(
-    ['template-with-exercises', templateId],
+    [TEMPLATES_QUERY_KEY, templateId],
     () => templatesService.getRelatedExercises(templateId),
     {
       enabled: templateId !== '',
@@ -53,7 +56,7 @@ const GroupedExercisesAccordion: FC<Props> = props => {
         AreRelated: payload.areRelated,
       }),
     {
-      onSuccess: () => queryClient.invalidateQueries(['template-with-exercises', templateId]),
+      onSuccess: () => queryClient.invalidateQueries([TEMPLATES_QUERY_KEY, templateId]),
     },
   );
 

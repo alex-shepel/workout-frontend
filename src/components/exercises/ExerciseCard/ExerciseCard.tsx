@@ -25,7 +25,7 @@ const ExerciseCard: FC<{ exercise: SimplifiedExerciseEntity }> = props => {
   const { mutate: deleteExercise, isLoading: isDeleting } = useMutation(
     exercisesService.deleteById,
     {
-      onSuccess: () => queryClient.invalidateQueries('exercises'),
+      onSuccess: () => queryClient.invalidateQueries(exercisesService.endpoint),
     },
   );
 

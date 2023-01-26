@@ -1,15 +1,17 @@
 import { ExerciseEntity, GroupEntity, SimplifiedExerciseEntity } from 'types/entities';
 import { useMemo } from 'react';
 import { useAxios } from 'hooks/utils';
+import { Service } from 'types/utils';
 
 const SERVICE_ENDPOINT = 'exercises';
 
 interface PostPayload extends Pick<SimplifiedExerciseEntity, 'Title' | 'Description' | 'GroupID'> {}
 
-interface ExercisesService {
-  getByGroupId: (groupId: GroupEntity['ID']) => Promise<SimplifiedExerciseEntity[]>;
-  post: (payload: PostPayload) => Promise<SimplifiedExerciseEntity>;
-  deleteById: (id: ExerciseEntity['ID']) => Promise<SimplifiedExerciseEntity>;
+interface ExercisesService extends Service {
+  readonly endpoint: typeof SERVICE_ENDPOINT;
+  readonly getByGroupId: (groupId: GroupEntity['ID']) => Promise<SimplifiedExerciseEntity[]>;
+  readonly post: (payload: PostPayload) => Promise<SimplifiedExerciseEntity>;
+  readonly deleteById: (id: ExerciseEntity['ID']) => Promise<SimplifiedExerciseEntity>;
 }
 
 const useExercisesService = () => {
@@ -32,7 +34,7 @@ const useExercisesService = () => {
       return data;
     };
 
-    return { getByGroupId, post, deleteById };
+    return { endpoint: SERVICE_ENDPOINT, getByGroupId, post, deleteById };
   }, [axios]);
 };
 

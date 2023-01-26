@@ -52,18 +52,22 @@ const ExercisesGroupSelection: FC = () => {
     }
   };
 
-  const { data: groups, isLoading } = useQuery<GroupEntity[]>('groups', groupsService.getAll, {
-    onSuccess: data => handleGetGroups(groups, data),
-  });
+  const { data: groups, isLoading } = useQuery<GroupEntity[]>(
+    groupsService.endpoint,
+    groupsService.getAll,
+    {
+      onSuccess: data => handleGetGroups(groups, data),
+    },
+  );
 
   const { mutate: postExercisesGroup, isLoading: isPosting } = useMutation(groupsService.post, {
-    onSuccess: () => queryClient.invalidateQueries('groups'),
+    onSuccess: () => queryClient.invalidateQueries(groupsService.endpoint),
   });
 
   const { mutate: deleteExerciseGroup, isLoading: isDeleting } = useMutation(
     groupsService.deleteById,
     {
-      onSuccess: () => queryClient.invalidateQueries('groups'),
+      onSuccess: () => queryClient.invalidateQueries(groupsService.endpoint),
     },
   );
 

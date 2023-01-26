@@ -1,6 +1,7 @@
 import { AuthEntity, UserEntity } from 'types/entities';
 import { useAxios } from 'hooks/utils';
 import { useMemo } from 'react';
+import { Service } from 'types/utils';
 
 const SERVICE_ENDPOINT = 'auth';
 
@@ -12,12 +13,13 @@ interface LoginPayload extends Pick<UserEntity, 'Email'> {
   Password: string;
 }
 
-interface AuthService {
-  register: (payload: RegisterPayload) => Promise<AuthEntity>;
-  login: (payload: LoginPayload) => Promise<AuthEntity>;
-  getCurrentUser: () => Promise<UserEntity>;
-  refresh: () => Promise<AuthEntity>;
-  logout: () => Promise<UserEntity>;
+interface AuthService extends Service {
+  readonly endpoint: typeof SERVICE_ENDPOINT;
+  readonly register: (payload: RegisterPayload) => Promise<AuthEntity>;
+  readonly login: (payload: LoginPayload) => Promise<AuthEntity>;
+  readonly getCurrentUser: () => Promise<UserEntity>;
+  readonly refresh: () => Promise<AuthEntity>;
+  readonly logout: () => Promise<UserEntity>;
 }
 
 const useAuthService = () => {
@@ -49,7 +51,7 @@ const useAuthService = () => {
       return data;
     };
 
-    return { register, login, getCurrentUser, refresh, logout };
+    return { endpoint: SERVICE_ENDPOINT, register, login, getCurrentUser, refresh, logout };
   }, [axios]);
 };
 

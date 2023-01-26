@@ -53,18 +53,18 @@ const TemplateSelection: FC = () => {
   };
 
   const { data: templates, isLoading } = useQuery<TemplateEntity[]>(
-    'templates',
+    templatesService.endpoint,
     templatesService.getAll,
     { onSuccess: data => handleGetTemplates(templates, data) },
   );
 
   const { mutate: postTemplate, isLoading: isPosting } = useMutation(templatesService.post, {
-    onSuccess: () => queryClient.invalidateQueries('templates'),
+    onSuccess: () => queryClient.invalidateQueries(templatesService.endpoint),
   });
 
   const { mutate: deleteTemplate, isLoading: isDeleting } = useMutation(
     templatesService.deleteById,
-    { onSuccess: () => queryClient.invalidateQueries('templates') },
+    { onSuccess: () => queryClient.invalidateQueries(templatesService.endpoint) },
   );
 
   const handleChange = (event: SelectChangeEvent) => {

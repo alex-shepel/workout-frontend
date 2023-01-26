@@ -17,7 +17,7 @@ const ExercisesList: FC = () => {
   const queryClient = useQueryClient();
 
   const { data: exercises, isLoading } = useQuery<SimplifiedExerciseEntity[]>(
-    ['exercises', currentGroupId],
+    [exercisesService.endpoint, currentGroupId],
     () => exercisesService.getByGroupId(currentGroupId!),
     {
       enabled: currentGroupId !== null,
@@ -25,7 +25,7 @@ const ExercisesList: FC = () => {
   );
 
   const { mutate: postExercise, isLoading: isPosting } = useMutation(exercisesService.post, {
-    onSuccess: () => queryClient.invalidateQueries('exercises'),
+    onSuccess: () => queryClient.invalidateQueries(exercisesService.endpoint),
   });
 
   const handleExerciseSubmit = (
@@ -36,9 +36,9 @@ const ExercisesList: FC = () => {
 
   useEffect(() => {
     if (currentGroupId) {
-      queryClient.invalidateQueries('exercises');
+      queryClient.invalidateQueries(exercisesService.endpoint);
     }
-  }, [currentGroupId, queryClient]);
+  }, [currentGroupId, exercisesService.endpoint, queryClient]);
 
   if (isLoading || isPosting) {
     return (

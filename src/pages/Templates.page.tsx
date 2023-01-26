@@ -9,7 +9,7 @@ import { useGroupsService } from 'hooks/services';
 const TemplatesPage: FC = () => {
   const groupsService = useGroupsService();
 
-  const { data: groups } = useQuery<GroupEntity[]>('groups', groupsService.getAll);
+  const { data: groups } = useQuery<GroupEntity[]>(groupsService.endpoint, groupsService.getAll);
 
   return (
     <TemplatesProvider>

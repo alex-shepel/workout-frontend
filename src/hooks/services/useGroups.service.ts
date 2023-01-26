@@ -1,15 +1,17 @@
 import { GroupEntity } from 'types/entities';
 import { useAxios } from 'hooks/utils';
 import { useMemo } from 'react';
+import { Service } from 'types/utils';
 
 const SERVICE_ENDPOINT = 'groups';
 
 interface PostPayload extends Pick<GroupEntity, 'Title' | 'Description'> {}
 
-interface GroupsService {
-  getAll: () => Promise<GroupEntity[]>;
-  post: (payload: PostPayload) => Promise<GroupEntity>;
-  deleteById: (id: GroupEntity['ID']) => Promise<GroupEntity>;
+interface GroupsService extends Service {
+  readonly endpoint: typeof SERVICE_ENDPOINT;
+  readonly getAll: () => Promise<GroupEntity[]>;
+  readonly post: (payload: PostPayload) => Promise<GroupEntity>;
+  readonly deleteById: (id: GroupEntity['ID']) => Promise<GroupEntity>;
 }
 
 const useGroupsService = () => {
@@ -31,7 +33,7 @@ const useGroupsService = () => {
       return data;
     };
 
-    return { getAll, post, deleteById };
+    return { endpoint: SERVICE_ENDPOINT, getAll, post, deleteById };
   }, [axios]);
 };
 
