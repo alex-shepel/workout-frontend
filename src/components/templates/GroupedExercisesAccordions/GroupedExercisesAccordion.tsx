@@ -10,13 +10,13 @@ import {
   SimplifiedExerciseEntity,
   SimplifiedTemplateEntity,
 } from 'types/entities';
+import { ExtraServiceKey } from 'types/utils';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import { useExercisesService, useTemplatesService } from 'hooks/services';
 import { useAppContext } from 'hooks/utils';
 import { TemplatesContext } from 'context/Templates.context';
 import s from './styles';
-import { ExtraServiceKey } from 'types/utils';
 
 interface Props {
   group: GroupEntity;
@@ -76,7 +76,7 @@ const GroupedExercisesAccordion: FC<Props> = props => {
           <Typography>Loading...</Typography>
         ) : (
           exercises?.map(exercise => {
-            const areRelated = template?.ExercisesIDs.includes(exercise.ID);
+            const areRelated = !!template?.ExercisesIDs.includes(exercise.ID);
             return (
               <FormGroup sx={s.checkboxRow} key={exercise.ID}>
                 <FormControlLabel
