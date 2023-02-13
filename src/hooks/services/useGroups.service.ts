@@ -1,7 +1,7 @@
 import { GroupEntity } from 'types/entities';
 import { useAxios } from 'hooks/utils';
 import { useMemo } from 'react';
-import { Service } from 'types/utils';
+import { Service } from 'types/common';
 
 const SERVICE_ENDPOINT = 'groups';
 

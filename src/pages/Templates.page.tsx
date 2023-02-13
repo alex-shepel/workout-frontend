@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { TemplatesProvider } from 'context/Templates.context';
-import { TemplateSelection } from 'components/templates';
-import GroupedExercisesAccordion from 'components/templates/GroupedExercisesAccordions/GroupedExercisesAccordion';
+import { GroupedExercisesAccordion, TemplateSelection } from 'components/templates';
 import { useQuery } from 'react-query';
 import { GroupEntity } from 'types/entities';
 import { useGroupsService } from 'hooks/services';

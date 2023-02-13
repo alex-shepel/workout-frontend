@@ -10,7 +10,7 @@ import {
   SimplifiedExerciseEntity,
   SimplifiedTemplateEntity,
 } from 'types/entities';
-import { ExtraServiceKey } from 'types/utils';
+import { ExtraServiceKey } from 'types/common';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import { useExercisesService, useTemplatesService } from 'hooks/services';

@@ -1,7 +1,7 @@
 import { ExerciseEntity, GroupEntity, SimplifiedExerciseEntity } from 'types/entities';
 import { useMemo } from 'react';
 import { useAxios } from 'hooks/utils';
-import { Service } from 'types/utils';
+import { Service } from 'types/common';
 
 const SERVICE_ENDPOINT = 'exercises';
 

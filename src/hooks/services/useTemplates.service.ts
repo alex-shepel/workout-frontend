@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useAxios } from 'hooks/utils';
-import { Service } from 'types/utils';
+import { Service } from 'types/common';
 import { ExerciseEntity, SimplifiedTemplateEntity, TemplateEntity } from 'types/entities';
 
 const SERVICE_ENDPOINT = 'templates';

@@ -1,3 +1,2 @@
-import TemplateSelection from './TemplateSelection';
-
-export { TemplateSelection };
+export { default as TemplateSelection } from './TemplateSelection';
+export { default as GroupedExercisesAccordion } from './GroupedExercisesAccordions';

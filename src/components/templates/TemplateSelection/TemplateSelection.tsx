@@ -109,9 +109,9 @@ const TemplateSelection: FC = () => {
               label="Training Template"
               onChange={handleChange}
             >
-              {templates?.map(group => (
-                <MenuItem key={group.ID} value={group.ID}>
-                  {group.Title}
+              {templates?.map(template => (
+                <MenuItem key={template.ID} value={template.ID}>
+                  {template.Title}
                 </MenuItem>
               ))}
             </Select>

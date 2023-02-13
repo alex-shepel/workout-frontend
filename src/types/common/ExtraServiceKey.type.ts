@@ -1,4 +1,4 @@
-import { Service } from 'types/utils';
+import { Service } from 'types/common';
 
 type ServiceHook = () => Service;
 
