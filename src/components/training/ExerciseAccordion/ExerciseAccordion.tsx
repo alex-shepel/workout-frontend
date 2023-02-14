@@ -18,7 +18,7 @@ const ExerciseAccordion: FC<Props> = props => {
   const setService = useSetService();
   const trainingService = useTrainingService();
 
-  const { mutate: complete } = useMutation(setService.complete, {
+  const { mutate: update } = useMutation(setService.update, {
     onSuccess: () => queryClient.invalidateQueries(trainingService.endpoint),
   });
 
@@ -38,7 +38,7 @@ const ExerciseAccordion: FC<Props> = props => {
         <Grid container rowGap={2}>
           {exercise.Sets?.map(set => (
             <Grid xs={12} key={set.ID} item>
-              <Set set={set} onComplete={complete} />
+              <Set set={set} onUpdate={update} />
             </Grid>
           ))}
         </Grid>

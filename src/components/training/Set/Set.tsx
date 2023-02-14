@@ -7,31 +7,32 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import { FormValues, Props } from './types';
 import s from './styles';
 
-const validate = (values: FormValues): FormErrors<FormValues> => {
-  const errors: FormErrors<FormValues> = {};
-  if (Number(values.Weight) <= 0) {
-    errors.Weight = 'Required';
-  }
-  if (Number(values.Repetitions) <= 0) {
-    errors.Repetitions = 'Required';
-  }
-  return errors;
-};
-
 const Set: FC<Props> = props => {
-  const { set, onComplete } = props;
+  const { set, onUpdate } = props;
+
+  const validate = (values: FormValues): FormErrors<FormValues> => {
+    const errors: FormErrors<FormValues> = {};
+    if (!set.Completed && Number(values.Weight) <= 0) {
+      errors.Weight = 'Required';
+    }
+    if (!set.Completed && Number(values.Repetitions) <= 0) {
+      errors.Repetitions = 'Required';
+    }
+    return errors;
+  };
 
   const submit = (values: FormValues, helpers: FormikHelpers<FormValues>) => {
-    onComplete({
+    onUpdate({
       ID: set.ID,
-      Weight: Number(values.Weight),
-      Repetitions: Number(values.Repetitions),
+      Weight: values.Weight,
+      Repetitions: values.Repetitions,
+      Completed: !set.Completed,
     });
     helpers.setSubmitting(false);
   };
 
   const formik = useFormik<FormValues>({
-    initialValues: { Weight: '0', Repetitions: '0' },
+    initialValues: { Weight: set.Weight, Repetitions: set.Repetitions },
     validate,
     onSubmit: submit,
   });
@@ -65,7 +66,7 @@ const Set: FC<Props> = props => {
           variant="standard"
           disabled={set.Completed}
         />
-        <IconButton type={'submit'} disabled={!formik.isValid}>
+        <IconButton type={'submit'} disabled={!set.Completed && !formik.isValid}>
           {set.Completed ? (
             <CheckBoxIcon color={'primary'} />
           ) : (

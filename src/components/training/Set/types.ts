@@ -1,11 +1,12 @@
 import { SetEntity } from 'types/entities';
+import useSetService from 'hooks/services/useSet.service';
+import { Flatten } from 'types/utils';
+
+interface UpdatePayload extends Flatten<Parameters<ReturnType<typeof useSetService>['update']>> {}
 
 export interface Props {
   set: SetEntity;
-  onComplete: (values: { ID: string; Weight: number; Repetitions: number }) => void;
+  onUpdate: (values: UpdatePayload) => void;
 }
 
-export interface FormValues {
-  Weight: `${number}`;
-  Repetitions: `${number}`;
-}
+export interface FormValues extends Pick<UpdatePayload, 'Weight' | 'Repetitions'> {}
