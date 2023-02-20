@@ -17,6 +17,9 @@ const AuthProvider: FC<{ children: ReactNode }> = props => {
 
   /* handles navigation on session's status change */
   useEffect(() => {
+    if (!data && (page === Path.LOGIN || page === Path.REGISTER)) {
+      return;
+    }
     if (data && (page === Path.LOGIN || page === Path.REGISTER)) {
       navigate('/diagram', { replace: true });
       return;
