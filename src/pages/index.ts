@@ -1,10 +1,10 @@
-import LoginPage from './Login.page';
-import RegisterPage from './Register.page';
-import DiagramPage from './Diagram.page';
-import TrainingPage from './Training.page';
-import ExercisesPage from './Exercises.page';
-import TemplatesPage from './Templates.page';
-import NotFoundPage from './NotFound.page';
+import LoginPage from './Login';
+import RegisterPage from './Register';
+import DiagramPage from './Diagram';
+import TrainingPage from './Training';
+import ExercisesPage from './Exercises';
+import TemplatesPage from './Templates';
+import NotFoundPage from './NotFound';
 
 export {
   LoginPage,
