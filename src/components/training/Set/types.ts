@@ -9,4 +9,7 @@ export interface Props {
   onUpdate: (values: UpdatePayload) => void;
 }
 
-export interface FormValues extends Pick<UpdatePayload, 'Weight' | 'Repetitions'> {}
+export interface FormValues {
+  Weight: UpdatePayload['Weight'] | '';
+  Repetitions: UpdatePayload['Repetitions'] | '';
+}

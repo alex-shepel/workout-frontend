@@ -11,31 +11,38 @@ import {
   SelectChangeEvent,
   Typography,
 } from '@mui/material';
-import { Props } from './types';
+import { ExtraServiceKey } from 'types/common';
 
-const TemplateSelection: FC<Props> = props => {
-  const { template } = props;
+const CURRENT_TEMPLATE_SERVICE_KEY: ExtraServiceKey<typeof useTemplatesService> =
+  'templates-current';
 
+const TemplateSelection: FC = () => {
   const queryClient = useQueryClient();
   const trainingService = useTrainingService();
   const templatesService = useTemplatesService();
 
-  const { data: templates, isLoading } = useQuery<TemplateEntity[]>(
+  const { data: templates, isLoading: isLoadingAll } = useQuery<TemplateEntity[]>(
     templatesService.endpoint,
     templatesService.getAll,
   );
 
-  const { mutate: change } = useMutation(trainingService.updateCurrent, {
+  const { data: current, isLoading: isLoadingCurrent } = useQuery<TemplateEntity>(
+    CURRENT_TEMPLATE_SERVICE_KEY,
+    templatesService.current,
+  );
+
+  const { mutate: select } = useMutation(templatesService.updateCurrent, {
     onSuccess: data => {
-      queryClient.setQueryData(trainingService.endpoint, data);
+      queryClient.setQueryData(CURRENT_TEMPLATE_SERVICE_KEY, data);
+      queryClient.invalidateQueries(trainingService.endpoint);
     },
   });
 
   const handleSelectTemplate = (e: SelectChangeEvent<TemplateEntity['ID']>) => {
-    change({ TemplateID: e.target.value });
+    select({ ID: e.target.value });
   };
 
-  if (isLoading) {
+  if (isLoadingAll || isLoadingCurrent) {
     return (
       <Grid container>
         <Grid item xs={12}>
@@ -54,7 +61,7 @@ const TemplateSelection: FC<Props> = props => {
             <Select
               labelId="training-template-select-label"
               id="training-template-select"
-              value={template.ID}
+              value={current?.ID}
               label="Training Template"
               onChange={handleSelectTemplate}
             >
@@ -67,7 +74,7 @@ const TemplateSelection: FC<Props> = props => {
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <Typography variant={'body2'}>{template.Description}</Typography>
+          <Typography variant={'body2'}>{current?.Description}</Typography>
         </Grid>
       </Grid>
     </form>

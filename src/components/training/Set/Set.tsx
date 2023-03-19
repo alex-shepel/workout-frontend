@@ -24,15 +24,15 @@ const Set: FC<Props> = props => {
   const submit = (values: FormValues, helpers: FormikHelpers<FormValues>) => {
     onUpdate({
       ID: set.ID,
-      Weight: values.Weight,
-      Repetitions: values.Repetitions,
+      Weight: Number(values.Weight),
+      Repetitions: Number(values.Repetitions),
       Completed: !set.Completed,
     });
     helpers.setSubmitting(false);
   };
 
   const formik = useFormik<FormValues>({
-    initialValues: { Weight: set.Weight, Repetitions: set.Repetitions },
+    initialValues: { Weight: '', Repetitions: '' },
     validate,
     onSubmit: submit,
   });
@@ -52,6 +52,7 @@ const Set: FC<Props> = props => {
           fullWidth
           variant="standard"
           disabled={set.Completed}
+          placeholder={String(set.Weight)}
         />
         <TextField
           value={formik.values.Repetitions}
@@ -65,6 +66,7 @@ const Set: FC<Props> = props => {
           fullWidth
           variant="standard"
           disabled={set.Completed}
+          placeholder={String(set.Repetitions)}
         />
         <IconButton type={'submit'} disabled={!set.Completed && !formik.isValid}>
           {set.Completed ? (

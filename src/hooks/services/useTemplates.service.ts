@@ -19,6 +19,8 @@ interface TemplatesService extends Service {
   readonly deleteById: (id: TemplateEntity['ID']) => Promise<TemplateEntity>;
   readonly getRelatedExercises: (id: TemplateEntity['ID']) => Promise<SimplifiedTemplateEntity>;
   readonly relateExercise: (payload: RelatePayload) => Promise<SimplifiedTemplateEntity>;
+  readonly current: () => Promise<TemplateEntity>;
+  readonly updateCurrent: (payload: Pick<TemplateEntity, 'ID'>) => Promise<TemplateEntity>;
 }
 
 const useTemplatesService = () => {
@@ -50,6 +52,16 @@ const useTemplatesService = () => {
       return data;
     };
 
+    const current: TemplatesService['current'] = async () => {
+      const { data } = await axios.get(`${SERVICE_ENDPOINT}/current`);
+      return data;
+    };
+
+    const updateCurrent: TemplatesService['updateCurrent'] = async payload => {
+      const { data } = await axios.post(`${SERVICE_ENDPOINT}/current`, payload);
+      return data;
+    };
+
     return {
       endpoint: SERVICE_ENDPOINT,
       getAll,
@@ -57,6 +69,8 @@ const useTemplatesService = () => {
       deleteById,
       getRelatedExercises: getRelatedExercises,
       relateExercise,
+      current,
+      updateCurrent,
     };
   }, [axios]);
 };

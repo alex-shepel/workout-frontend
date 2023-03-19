@@ -19,6 +19,7 @@ const TrainingPage: FC = () => {
   const { mutate: next } = useMutation(trainingService.next, {
     onSuccess: data => {
       queryClient.setQueryData(trainingService.endpoint, data);
+      queryClient.invalidateQueries('templates-current');
     },
   });
 
@@ -34,11 +35,9 @@ const TrainingPage: FC = () => {
 
   return (
     <Grid container mb={2} rowSpacing={2}>
-      {training?.Template && (
-        <Grid item xs={12}>
-          <TemplateSelection template={training.Template} />
-        </Grid>
-      )}
+      <Grid item xs={12}>
+        <TemplateSelection />
+      </Grid>
       <Grid item xs={12}>
         {training?.Exercises?.map(exercise => (
           <ExerciseAccordion key={exercise.ID} exercise={exercise} />
